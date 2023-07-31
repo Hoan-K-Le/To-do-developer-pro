@@ -1,7 +1,10 @@
 import { useParams } from 'react-router-dom'
+import { useContext } from 'react'
+import { TodoContext } from '../contexts/todoContext'
 
-function Todo({ todos }) {
+function Todo() {
   const { id } = useParams()
+  const { todos } = useContext(TodoContext)
   const todo = todos.find(todo => todo.id === id)
 
   if (!todo) return <div>No todo found</div>

@@ -1,6 +1,9 @@
 import { Link } from 'react-router-dom'
+import { useContext } from 'react'
+import { TodoContext } from '../contexts/todoContext'
 
-function Todo({ todo, completeTodo, removeTodo }) {
+function Todo({ todo }) {
+  const { completeTodo, removeTodo } = useContext(TodoContext)
   return (
     <div
       className="todo"

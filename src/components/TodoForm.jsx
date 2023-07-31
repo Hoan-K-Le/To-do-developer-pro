@@ -1,7 +1,9 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
+import { TodoContext } from '../contexts/todoContext'
 
-function TodoForm({ addTodo }) {
+function TodoForm() {
   const [value, setValue] = useState('')
+  const { addTodo } = useContext(TodoContext)
 
   const handleSubmit = e => {
     e.preventDefault()
