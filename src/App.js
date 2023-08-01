@@ -1,8 +1,5 @@
 import React, { useState } from 'react'
 import { BrowserRouter as Router, Link, Route, Routes } from 'react-router-dom'
-import { TodoProvider } from './contexts/todoContext'
-import Todos from './pages/Todos'
-import TodoDetail from './pages/Todo'
 
 function App() {
   return (
@@ -10,12 +7,10 @@ function App() {
       <nav>
         <Link to="/">Home</Link>
       </nav>
-      <TodoProvider>
-        <Routes>
-          <Route exact path="/" element={<Todos />} />
-          <Route path="/todo/:id" element={<TodoDetail />} />
-        </Routes>
-      </TodoProvider>
+      <Routes>
+        <Route exact path="/" element={<abc />} />
+        <Route path="/todo/:id" element={<abc />} />
+      </Routes>
     </Router>
   )
 }
