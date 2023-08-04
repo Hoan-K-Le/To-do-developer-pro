@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { uid } from 'uid'
+import TaskHeader from '../../components/TaskHeader/TaskHeader'
+import TaskInput from '../../components/Input/TaskInput'
 
 function Index() {
   const [priority, setPriority] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
@@ -13,6 +15,7 @@ function Index() {
   const [value, setValue] = useState('')
   const [checkList, setCheckList] = useState('')
   const [checkListItems, setCheckListItems] = useState([])
+  const [tagValue, setTagValue] = useState('')
 
   const handlePriority = selectPriority => {
     if (!selectPriority) return
@@ -38,11 +41,6 @@ function Index() {
   }
   const addTask = () => {
     if (!value) return
-    const addCheckList = {
-      checkList,
-      id: uid(),
-      isComplete: false,
-    }
     const newTask = {
       value,
       priority: selectedPriority,
@@ -52,7 +50,7 @@ function Index() {
       isComplete: false,
       percent: 0,
       checkList: checkListItems,
-      tags: [],
+      tags: [tagValue],
       id: uid(),
     }
     setTasks(prevTask => [...prevTask, newTask])
@@ -61,6 +59,8 @@ function Index() {
     setSelectedPriority(null)
     setSelectedDate('')
     setSelectedTime('')
+    setCheckListItems([])
+    setTagValue('')
     setInStorage([...tasks, newTask])
   }
 
@@ -87,37 +87,16 @@ function Index() {
   }, [])
   return (
     <div className="container  p-10">
-      <div className="flex mb-5 items-center p-3 ">
-        <div className="">
-          <Link to="/">
-            <button className="rounded-full bg-white p-2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="w-6 h-6"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
-                />
-              </svg>
-            </button>
-          </Link>
-        </div>
-        <p className=" text-center text-2xl flex-grow">Add New Task</p>
-      </div>
-      <p className="text-lg mb-5">Task Name</p>
+      <TaskHeader />
+      {/* <p className="text-lg mb-5">Task Name</p>
       <input
         onChange={e => setValue(e.target.value)}
         value={value}
         className="border  px-20 rounded-2xl text-lg py-2 "
         type="text"
         placeholder="Name of task..."
-      />
+      /> */}
+      <TaskInput setValue={setValue} value={value} />
       <p className="mt-4 text-lg">Select Priority Level</p>
       <div className="flex justify-around mt-4 gap-2">
         {priority.length > 0 &&
@@ -169,7 +148,7 @@ function Index() {
       </div>
 
       {/* subchecklist */}
-      <p className="text-xl">Add Checklist</p>
+      <p className="text-xl mt-4">Add Checklist</p>
       <div className="pt-4 flex relative">
         <input
           value={checkList}
@@ -225,8 +204,10 @@ function Index() {
         ))}
 
       <div className="pt-4">
-        <p className="text-xl">Add Tags</p>
+        <p className="text-xl mb-4">Add Tags</p>
         <input
+          onChange={e => setTagValue(e.target.value)}
+          value={tagValue}
           className="w-full p-2 rounded-xl"
           type="text"
           placeholder="Tag1, Tag2, Tag3, ..."
