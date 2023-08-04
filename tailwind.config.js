@@ -5,6 +5,7 @@ module.exports = {
     extend: {
       colors: {
         'button-primary': '#0D99FF',
+        'remove-checkList': '#F55858CC',
       },
     },
   },
