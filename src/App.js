@@ -10,9 +10,6 @@ function App() {
   return (
     <Router>
       <TaskProvider>
-        <nav>
-          <Link to="/">Home</Link>
-        </nav>
         <Routes>
           <Route exact path="/" element={<Home />} />
           <Route path="/task" element={<Task />} />

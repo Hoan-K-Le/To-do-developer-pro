@@ -1,6 +1,6 @@
 import { createContext, useState, useEffect } from 'react'
 import { uid } from 'uid'
-
+import { useNavigate } from 'react-router-dom'
 export const TodoContext = createContext()
 
 export const TaskProvider = ({ children }) => {
@@ -38,6 +38,7 @@ export const TaskProvider = ({ children }) => {
   const setInStorage = list => {
     return localStorage.setItem('tasks', JSON.stringify(list))
   }
+  const navigate = useNavigate()
   const addTask = () => {
     if (!value) return
     const newTask = {
@@ -58,8 +59,9 @@ export const TaskProvider = ({ children }) => {
     setSelectedPriority(null)
     setSelectedDate('')
     setSelectedTime('')
-    setCheckListItems([])
     setTagValue('')
+    setCheckListItems([])
+    navigate('/')
     setInStorage([...tasks, newTask])
   }
 
@@ -99,6 +101,7 @@ export const TaskProvider = ({ children }) => {
         handleTime,
         handleDate,
         complexity,
+        setTagValue,
         handleComplexity,
         selectedComplexity,
         priority,

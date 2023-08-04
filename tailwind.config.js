@@ -7,6 +7,9 @@ module.exports = {
         'button-primary': '#0D99FF',
         'remove-checkList': '#F55858CC',
       },
+      width: {
+        'container-width': '450px',
+      },
     },
   },
   plugins: [],

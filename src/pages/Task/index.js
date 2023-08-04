@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { uid } from 'uid'
 import TaskHeader from '../../components/TaskHeader/TaskHeader'
 import TaskInput from '../../components/Input/TaskInput'
@@ -13,38 +13,17 @@ import { TodoContext } from '../../contexts/taskContext'
 
 function Index() {
   const { addTask } = useContext(TodoContext)
+  const navigate = useNavigate()
 
   return (
     <div className="container  p-10">
       <TaskHeader />
-      <TaskInput
-      //  setValue={setValue} value={value}
-      />
-      <SelectPriority
-      // priority={priority}
-      // handlePriority={handlePriority}
-      // selectedPriority={selectedPriority}
-      />
-      <SelectComplexity
-      // complexity={complexity}
-      // handleComplexity={handleComplexity}
-      // selectedComplexity={selectedComplexity}
-      />
-      <TimeInput
-      // handleDate={handleDate}
-      // handleTime={handleTime}
-      // selectedTime={selectedTime}
-      />
-      <SubCheckList
-      // setCheckList={setCheckList}
-      // checkList={checkList}
-      // handleCheckList={handleCheckList}
-      // checkListItems={checkListItems}
-      // handleRemoveCheckList={handleRemoveCheckList}
-      />
-      <Tags
-      // setTagValue={setTagValue} tagValue={tagValue}
-      />
+      <TaskInput />
+      <SelectPriority />
+      <SelectComplexity />
+      <TimeInput />
+      <SubCheckList />
+      <Tags />
       <div className="flex justify-center">
         <button
           onClick={addTask}
