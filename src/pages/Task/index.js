@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+
 import { uid } from 'uid'
 import TaskHeader from '../../components/TaskHeader/TaskHeader'
 import TaskInput from '../../components/Input/TaskInput'
@@ -13,7 +13,6 @@ import { TodoContext } from '../../contexts/taskContext'
 
 function Index() {
   const { addTask } = useContext(TodoContext)
-  const navigate = useNavigate()
 
   return (
     <div className="container  p-10">

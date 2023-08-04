@@ -1,15 +1,54 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { TodoContext } from '../../contexts/taskContext'
 
 function Index() {
+  const [sorted, SetSorted] = useState('default')
+  const [filterValue, setFilterValue] = useState('')
+  const [tags, setTags] = useState('')
   const { tasks } = useContext(TodoContext)
 
   const handleTags = e => {
-    return tasks.filter(t => t.tags === e.target.value)
+    setTags(e.target.value)
   }
 
+  const handleFilter = e => {
+    setFilterValue(e.target.value)
+  }
+  const handleSort = e => {
+    SetSorted(e.target.value)
+  }
+
+  let sortedList = [...tasks]
+
+  // filter the list
+  let filteredList = sortedList
+
+  if (tags) {
+    filteredList = sortedList.filter(task => task.tags.includes(tags))
+  }
+
+  if (filterValue) {
+    filteredList = filteredList.filter(task =>
+      task.value.toLowerCase().includes(filterValue.toLowerCase())
+    )
+  }
+
+  switch (sorted) {
+    case 'ascPriority':
+      sortedList.sort((a, b) => a.priority - b.priority)
+      break
+    case 'descPriority':
+      sortedList.sort((a, b) => b.priority - a.priority)
+      break
+    case 'ascComplexity':
+      sortedList.sort((a, b) => a.complexity - b.complexity)
+      break
+    case 'descComplexity':
+      sortedList.sort((a, b) => b.complexity - a.complexity)
+      break
+  }
   return (
     <div className="container w-[450px] flex flex-col items-center mt-4 ">
       {/* Input search filter */}
@@ -32,6 +71,7 @@ function Index() {
         </span>
         <span></span>
         <input
+          onChange={handleFilter}
           className=" px-10 w-full text-lg  rounded-2xl py-3 border"
           type="text"
           placeholder="Search..."
@@ -40,25 +80,34 @@ function Index() {
       {/* 2 select sort and filter by tags */}
 
       <div className="flex gap-12 pt-10 w-full ">
-        <select className="border w-6/12 flex-grow text-center  rounded-xl py-3 font-bold">
-          <option className="">Default</option>
-          <option>Asc date</option>
-          <option>desc date</option>
-          <option>asc compelx</option>
-          <option>desc complx</option>
-          <option>asc prio</option>
-          <option>desc prio</option>
+        <select
+          onChange={handleSort}
+          className="border w-6/12 flex-grow text-center  rounded-xl py-3 font-bold"
+        >
+          <option value={sorted} className="">
+            Default
+          </option>
+          <option value="ascPriority">Asc Priority</option>
+          <option value="descPriority">Desc Priority</option>
+          <option value="ascComplexity">Asc Complex</option>
+          <option value="descComplexity">Desc Complex</option>
         </select>
         <select
           onChange={handleTags}
           className="border w-6/12 py-2 text-center flex-grow rounded-2xl font-bold"
+          value={tags}
         >
-          {tasks.length > 0 && tasks.map(tag => <option>{tag.tags}</option>)}
+          <option value="">All Tags</option>
+          {tasks.map(task => (
+            <option key={task.id} value={task.tags}>
+              {task.tags}
+            </option>
+          ))}
         </select>
       </div>
       {/* new task btn/link that will go to the add new task page */}
-      {tasks.length > 0 &&
-        tasks.map((task, i) => (
+      {filteredList.length > 0 &&
+        filteredList.map((task, i) => (
           <div className=" border w-full mt-4 rounded-2xl bg-white p-5">
             {/* the blue mark with edit and checkmark button */}
             <div className="flex justify-between items-center mb-2">
