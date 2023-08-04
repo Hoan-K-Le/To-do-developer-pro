@@ -1,6 +1,9 @@
 import React from 'react'
+import { useContext } from 'react'
+import { TodoContext } from '../../contexts/taskContext'
 
-function TaskInput({ setValue, value }) {
+function TaskInput() {
+  const { setValue, value } = useContext(TodoContext)
   return (
     <>
       <p className="text-lg mb-5">Task Name</p>
