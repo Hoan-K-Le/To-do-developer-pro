@@ -50,7 +50,7 @@ export const TaskProvider = ({ children }) => {
       isComplete: false,
       percent: 0,
       checkList: checkListItems,
-      tags: [tagValue],
+      tags: !tagValue ? [] : [tagValue],
       id: uid(),
     }
     setTasks(prevTask => [...prevTask, newTask])

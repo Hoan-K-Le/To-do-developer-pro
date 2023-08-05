@@ -49,6 +49,8 @@ function Index() {
       sortedList.sort((a, b) => b.complexity - a.complexity)
       break
   }
+
+  const tasksWithTags = tasks.filter(task => task.tags && task.tags.length > 0)
   return (
     <div className="container w-[450px] flex flex-col items-center mt-4 ">
       {/* Input search filter */}
@@ -98,7 +100,7 @@ function Index() {
           value={tags}
         >
           <option value="">All Tags</option>
-          {tasks.map(task => (
+          {tasksWithTags.map(task => (
             <option key={task.id} value={task.tags}>
               {task.tags}
             </option>
@@ -244,6 +246,11 @@ function Index() {
                 {!task.tags ? '' : task.tags}
               </span>
             </div>
+            <Link to={`/task/${task.id}`}>
+              <button className="text-xs text-blue-500 mt-3">
+                Task Details
+              </button>
+            </Link>
           </div>
         ))}
       <Link to="/task">
