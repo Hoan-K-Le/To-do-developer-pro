@@ -13,7 +13,7 @@ function App() {
         <Routes>
           <Route exact path="/" element={<Home />} />
           <Route path="/task" element={<Task />} />
-          <Route path="/task/:id/edit" element={<EditTask />} />
+          <Route path="/task/:taskId/edit" element={<EditTask />} />
           <Route path="/task/:id" element={<TaskDetail />} />
         </Routes>
       </TaskProvider>

@@ -38,6 +38,22 @@ export const TaskProvider = ({ children }) => {
   const setInStorage = list => {
     return localStorage.setItem('tasks', JSON.stringify(list))
   }
+
+  const updateTask = updatedTask => {
+    setTasks(prevTasks => {
+      const updatedTasks = prevTasks.map(task =>
+        task.id === updatedTask.id ? { ...task, ...updatedTask } : task
+      )
+      // Update the tasks in state
+      setTasks(updatedTasks)
+
+      // Update tasks in local storage
+      setInStorage(updatedTasks)
+      navigate('/')
+      return updatedTasks
+    })
+  }
+
   const navigate = useNavigate()
   const addTask = () => {
     if (!value) return
@@ -110,6 +126,7 @@ export const TaskProvider = ({ children }) => {
         selectedPriority,
         value,
         setValue,
+        updateTask,
       }}
     >
       {children}

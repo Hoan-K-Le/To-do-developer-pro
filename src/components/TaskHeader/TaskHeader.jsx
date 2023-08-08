@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 function TaskHeader() {
   return (
-    <div className="flex mb-5 items-center p-3 ">
+    <div className="flex mb-5 items-center p-3  ">
       <div className="">
         <Link to="/">
           <button className="rounded-full bg-white p-2">
