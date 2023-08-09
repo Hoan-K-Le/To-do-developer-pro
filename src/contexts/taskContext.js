@@ -16,6 +16,8 @@ export const TaskProvider = ({ children }) => {
   const [checkListItems, setCheckListItems] = useState([])
   const [tagValue, setTagValue] = useState('')
 
+  const navigate = useNavigate()
+
   const handlePriority = selectPriority => {
     if (!selectPriority) return
     setSelectedPriority(selectPriority)
@@ -54,7 +56,6 @@ export const TaskProvider = ({ children }) => {
     })
   }
 
-  const navigate = useNavigate()
   const addTask = () => {
     if (!value) return
     const newTask = {
@@ -106,27 +107,48 @@ export const TaskProvider = ({ children }) => {
   return (
     <TodoContext.Provider
       value={{
+        setInStorage,
+        ///////////////
+        // Tasks related
+        tasks,
+        addTask,
+        updateTask,
+        ///////////////
+        // Values/tags
+        value,
+        tagValue,
+        setTagValue,
+        setValue,
+        ////////////////
+        // Checklist related stuff
         checkList,
         setCheckList,
         checkListItems,
-        tasks,
-        addTask,
+        setCheckListItems,
         handleCheckList,
         handleRemoveCheckList,
-        setInStorage,
-        handleTime,
-        handleDate,
+        ///////////////
+        // Complexities
         complexity,
-        setTagValue,
         handleComplexity,
         selectedComplexity,
+        setSelectedComplexity,
+        ///////////////
+        // Priorities
         priority,
         setPriority,
         handlePriority,
         selectedPriority,
-        value,
-        setValue,
-        updateTask,
+        setSelectedPriority,
+        //////////////
+        // Time/Date
+        handleTime,
+        handleDate,
+        selectedDate,
+        selectedTime,
+        setSelectedTime,
+        setSelectedDate,
+        /////////////
       }}
     >
       {children}
