@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { useContext, useState } from 'react'
 import { TodoContext } from '../../contexts/taskContext'
+import { format } from 'date-fns'
 
 function Index() {
   const [sorted, SetSorted] = useState('default')
@@ -176,7 +177,9 @@ function Index() {
               </span>
               <span className="mr-2">Due Date: </span>
               <span className="text-blue-400">
-                {!task.date ? 'No set date' : task.date}
+                {!task.date
+                  ? 'No set date'
+                  : format(new Date(task.date), 'EEEE MMM d, h:mm a')}
               </span>
             </div>
             {/* Priority: low (4/10) */}

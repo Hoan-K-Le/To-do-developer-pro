@@ -14,7 +14,7 @@ function App() {
           <Route exact path="/" element={<Home />} />
           <Route path="/task" element={<Task />} />
           <Route path="/task/:taskId/edit" element={<EditTask />} />
-          <Route path="/task/:id" element={<TaskDetail />} />
+          <Route path="/task/:taskId" element={<TaskDetail />} />
         </Routes>
       </TaskProvider>
     </Router>

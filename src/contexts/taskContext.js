@@ -56,6 +56,17 @@ export const TaskProvider = ({ children }) => {
     })
   }
 
+  const handleDelete = taskId => {
+    setTasks(prevTask => {
+      if (!prevTask) return
+      const updatedTask = prevTask.filter(task => task.id !== taskId)
+      setInStorage(updatedTask)
+      setTasks(updatedTask)
+      navigate('/')
+      return updatedTask
+    })
+  }
+
   const addTask = () => {
     if (!value) return
     const newTask = {
@@ -149,6 +160,9 @@ export const TaskProvider = ({ children }) => {
         setSelectedTime,
         setSelectedDate,
         /////////////
+
+        // Delete
+        handleDelete,
       }}
     >
       {children}
