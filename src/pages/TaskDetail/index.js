@@ -12,12 +12,22 @@ function Index() {
   const getTask = tasks.find(task => {
     if (task.id === taskId) return task
   })
-
   let formattedDate = ''
-  if (getTask && getTask.date && getTask.time) {
-    const dateObj = parseISO(getTask.date)
-    formattedDate = format(dateObj, 'EEEE MMM d, h:mm a')
+  if (getTask?.date) {
+    formattedDate = format(new Date(getTask.date), 'EEEE MMM d, h:mm a')
+  } else {
+    return 'no set date'
   }
+
+  // calculate the date
+  // const currentDate = format(new Date(), 'EEEE MMM d, h:mm a')
+  const currentDate = new Date()
+  const dueDate = new Date(getTask.date)
+
+  console.log(currentDate.getTime(), dueDate.getTime())
+  const time_difference = dueDate.getTime() - currentDate.getTime()
+  const different_in_days = time_difference / (1000 * 3600 * 24)
+  console.log(different_in_days)
 
   const checklistComplete = checklistId => {
     const updatedCheckLists = tasks.map(task => {
@@ -122,7 +132,7 @@ function Index() {
           </span>
           <span className="mr-2 text-xl">Due Date: </span>
           <span className="text-blue-400 text-xl">
-            {formattedDate || 'no due date'}
+            {formattedDate ?? 'no set date'}
           </span>
         </div>
         {/* Priority: low (4/10) */}
