@@ -9,7 +9,7 @@ function Index() {
   const [filterValue, setFilterValue] = useState('')
   const [tags, setTags] = useState('')
 
-  const { tasks } = useContext(TodoContext)
+  const { tasks, handleCompleteTask } = useContext(TodoContext)
 
   const handleTags = e => {
     setTags(e.target.value)
@@ -113,14 +113,18 @@ function Index() {
       {/* new task btn/link that will go to the add new task page */}
       {filteredList.length > 0 &&
         filteredList.map((task, i) => (
-          <div className=" border w-full mt-4 rounded-2xl bg-white p-5">
+          <div
+            className={`border w-full mt-4 rounded-2xl ${
+              task.isComplete ? 'bg-blue-100' : 'bg-white'
+            } p-5`}
+          >
             {/* the blue mark with edit and checkmark button */}
             <div className="flex justify-between items-center mb-2">
               <div className="flex items-center gap-2">
                 <div className="bg-blue-400 h-[1rem] rounded-full w-[1rem]"></div>
                 <span className="font-bold">{task.value}</span>
               </div>
-              <div className="flex gap-2">
+              <div className="flex gap-8">
                 <Link to={`/task/${task.id}/edit`}>
                   <button className="bg-blue-200 p-1 rounded-full">
                     <svg
@@ -139,7 +143,10 @@ function Index() {
                     </svg>
                   </button>
                 </Link>
-                <button className="bg-blue-200 p-1 rounded-full">
+                <button
+                  onClick={() => handleCompleteTask(task.id)}
+                  className="bg-blue-200 p-1 rounded-full"
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"

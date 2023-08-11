@@ -5,17 +5,54 @@ import { format, parseISO } from 'date-fns'
 
 function Index() {
   const { taskId } = useParams()
-  const { tasks, handleDelete } = useContext(TodoContext)
+  const { tasks, handleDelete, setTasks, setInStorage } = useContext(
+    TodoContext
+  )
 
   const getTask = tasks.find(task => {
     if (task.id === taskId) return task
   })
-  console.log(getTask)
+
   let formattedDate = ''
   if (getTask && getTask.date && getTask.time) {
     const dateObj = parseISO(getTask.date)
     formattedDate = format(dateObj, 'EEEE MMM d, h:mm a')
   }
+
+  const checklistComplete = checklistId => {
+    const updatedCheckLists = tasks.map(task => {
+      if (task.id === taskId) {
+        const updatedChecklist = task.checkList.map(list => {
+          if (list.id === checklistId) {
+            return { ...list, isComplete: !list.isComplete }
+          }
+
+          return list
+        })
+
+        return { ...task, checkList: updatedChecklist }
+      }
+      return task
+    })
+
+    // Update the state with the updated checklist
+    setTasks(updatedCheckLists)
+    setInStorage(updatedCheckLists)
+  }
+
+  // counts the length of the isComplete
+  const completeCheckListCount = getTask?.checkList
+    ? getTask.checkList.filter(list => list.isComplete).length
+    : 0
+
+  // Counts the length of the array of checkList
+  const getChecklistLength = getTask?.checkList ? getTask.checkList.length : 0
+
+  // // grab both and calculate the percentage
+  const completePercentage =
+    completeCheckListCount > 0
+      ? (completeCheckListCount / getChecklistLength) * 100
+      : 0
 
   return (
     <div className="container p-10 w-[500px]">
@@ -131,12 +168,17 @@ function Index() {
           <span className="text-xl">({getTask?.complexity ?? 0}/10)</span>
         </div>
         {/* progress bar */}
-        <div>
-          <div>
-            <span>Task Complete</span>
-            <span>0%</span>
+        <div className="w-full mt-4">
+          <div className="flex items-center justify-between">
+            <span className="text-xl">Task Complete</span>
+            <span className="text-xl">{completePercentage}%</span>
           </div>
-          <p>Progress bar</p>
+          <div className="w-full  relative border rounded-xl h-[1rem] mt-4 ">
+            <div
+              className={`rounded-xl  bg-pink-300 h-[1rem]`}
+              style={{ width: `${completePercentage}%` }}
+            ></div>
+          </div>
         </div>
 
         {/* checklist for subtasks */}
@@ -149,24 +191,33 @@ function Index() {
         )}
         {getTask?.checkList &&
           getTask.checkList.map(list => (
-            <div className="flex justify-between my-4 items-center p-3 rounded-3xl bg-white">
-              <span className="text-xl ">{list.value}</span>
-              <span className="bg-blue-200 rounded-3xl p-2 ">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="1.5"
-                  stroke="currentColor"
-                  class="w-6 h-6"
+            <div className="">
+              <button
+                onClick={() => checklistComplete(list.id)}
+                className="flex w-full justify-between my-4 items-center p-3 rounded-3xl bg-white"
+              >
+                <span className="text-xl ">{list.value}</span>
+                <span
+                  className={`${
+                    list.isComplete ? 'bg-blue-400' : 'bg-blue-200'
+                  } rounded-3xl p-2 `}
                 >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M4.5 12.75l6 6 9-13.5"
-                  />
-                </svg>
-              </span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="w-6 h-6"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M4.5 12.75l6 6 9-13.5"
+                    />
+                  </svg>
+                </span>
+              </button>
             </div>
           ))}
       </div>

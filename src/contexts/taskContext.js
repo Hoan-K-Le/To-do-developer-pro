@@ -48,7 +48,6 @@ export const TaskProvider = ({ children }) => {
       )
       // Update the tasks in state
       setTasks(updatedTasks)
-
       // Update tasks in local storage
       setInStorage(updatedTasks)
       navigate('/')
@@ -67,6 +66,23 @@ export const TaskProvider = ({ children }) => {
     })
   }
 
+  const handleCompleteTask = taskId => {
+    setTasks(prevTask => {
+      const updatedTasks = prevTask.map(task => {
+        if (task.id === taskId) {
+          return {
+            ...task,
+            isComplete: !task.isComplete,
+          }
+        }
+        return task
+      })
+      setInStorage(updatedTasks)
+      setTasks(updatedTasks)
+      return updatedTasks
+    })
+  }
+
   const addTask = () => {
     if (!value) return
     const newTask = {
@@ -76,7 +92,6 @@ export const TaskProvider = ({ children }) => {
       date: selectedDate,
       time: selectedTime,
       isComplete: false,
-      percent: 0,
       checkList: checkListItems,
       tags: !tagValue ? [] : [tagValue],
       id: uid(),
@@ -124,6 +139,7 @@ export const TaskProvider = ({ children }) => {
         tasks,
         addTask,
         updateTask,
+        setTasks,
         ///////////////
         // Values/tags
         value,
@@ -163,6 +179,8 @@ export const TaskProvider = ({ children }) => {
 
         // Delete
         handleDelete,
+        // completeTasks
+        handleCompleteTask,
       }}
     >
       {children}
