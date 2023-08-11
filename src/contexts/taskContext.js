@@ -96,7 +96,6 @@ export const TaskProvider = ({ children }) => {
       tags: !tagValue ? [] : [tagValue],
       id: uid(),
     }
-    setTasks(prevTask => [...prevTask, newTask])
     setValue('')
     setSelectedComplexity(null)
     setSelectedPriority(null)
@@ -105,6 +104,7 @@ export const TaskProvider = ({ children }) => {
     setTagValue('')
     setCheckListItems([])
     navigate('/')
+    setTasks(prevTask => [...prevTask, newTask])
     setInStorage([...tasks, newTask])
   }
 

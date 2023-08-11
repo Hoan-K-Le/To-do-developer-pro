@@ -52,9 +52,9 @@ function EditTask() {
   const clearEdit = () => {
     setSelectedPriority(null)
     setSelectedComplexity(null)
+    setCheckListItems([])
     setSelectedTime('')
     setSelectedDate('')
-    setCheckListItems([])
     setCheckList('')
     setTagValue('')
   }
