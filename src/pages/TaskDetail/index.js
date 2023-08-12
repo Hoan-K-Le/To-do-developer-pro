@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { TodoContext } from '../../contexts/taskContext'
-import { format, parseISO } from 'date-fns'
+import { format } from 'date-fns'
 
 function Index() {
   const { taskId } = useParams()
@@ -16,9 +16,7 @@ function Index() {
   if (getTask?.date) {
     formattedDate = format(new Date(getTask.date), 'EEEE MMM d, h:mm a')
   } else {
-    return 'no set date'
   }
-
   // calculate the date
   // const currentDate = format(new Date(), 'EEEE MMM d, h:mm a')
   const currentDate = new Date()
@@ -64,6 +62,7 @@ function Index() {
       ? (completeCheckListCount / getChecklistLength) * 100
       : 0
 
+  // console.log(completePercentage)
   return (
     <div className="container p-10 w-[500px]">
       <div className="flex mb-5 items-center p-3 justify-between ">
@@ -132,7 +131,7 @@ function Index() {
           </span>
           <span className="mr-2 text-xl">Due Date: </span>
           <span className="text-blue-400 text-xl">
-            {formattedDate ?? 'no set date'}
+            {formattedDate ? formattedDate : 'No Set Date'}
           </span>
         </div>
         {/* Priority: low (4/10) */}
