@@ -190,7 +190,7 @@ function Index() {
               </span>
             </div>
             {/* Priority: low (4/10) */}
-            <div className="flex items-center mt-1">
+            <div className="flex items-center mt-1 relative">
               <span className="mr-1">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -220,34 +220,39 @@ function Index() {
               </span>
             </div>
             {/* complexity */}
-            <div className="flex items-center">
-              <span className="mr-1">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="w-4 h-4"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z"
-                  />
-                </svg>
-              </span>
-              <span className="mr-2">Complexity: </span>
-              <span>
-                {task.complexity < 5
-                  ? 'Low'
-                  : task.complexity > 5 && task.complexity < 7
-                  ? 'Moderate'
-                  : task.complexity > 7
-                  ? 'High'
-                  : ''}{' '}
-                ({!task.complexity ? '0' : task.complexity}/10)
-              </span>
+            <div className="flex items-center relative justify-between">
+              <div className="flex items-center">
+                <span className="mr-1">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="w-4 h-4"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z"
+                    />
+                  </svg>
+                </span>
+                <span className="mr-2">Complexity: </span>
+                <span>
+                  {task.complexity < 5
+                    ? 'Low'
+                    : task.complexity > 5 && task.complexity < 7
+                    ? 'Moderate'
+                    : task.complexity > 7
+                    ? 'High'
+                    : ''}{' '}
+                  ({!task.complexity ? '0' : task.complexity}/10)
+                </span>
+              </div>
+              <div className=" border-4 outline-pink-500  p-1 right-0 absolute text-center rounded-full">
+                <span>{task?.percent ?? 0}%</span>
+              </div>
             </div>
             <div className="mt-2 items-center flex ">
               <span

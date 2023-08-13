@@ -91,6 +91,7 @@ export const TaskProvider = ({ children }) => {
       complexity: selectedComplexity,
       date: selectedDate,
       time: selectedTime,
+      percent: 0,
       isComplete: false,
       checkList: checkListItems,
       tags: !tagValue ? [] : [tagValue],

@@ -34,35 +34,34 @@ function Index() {
           if (list.id === checklistId) {
             return { ...list, isComplete: !list.isComplete }
           }
-
           return list
         })
 
-        return { ...task, checkList: updatedChecklist }
+        // Calculate the new completePercentage
+        const updatedCompleteCheckListCount = updatedChecklist.filter(
+          list => list.isComplete
+        ).length
+
+        const updatedCompletePercentage =
+          updatedCompleteCheckListCount > 0
+            ? (updatedCompleteCheckListCount / updatedChecklist.length) * 100
+            : 0
+
+        // Update the task with the new percentage
+        const updatedTask = {
+          ...task,
+          percent: updatedCompletePercentage,
+          checkList: updatedChecklist,
+        }
+
+        return updatedTask
       }
       return task
     })
-
     // Update the state with the updated checklist
     setTasks(updatedCheckLists)
     setInStorage(updatedCheckLists)
   }
-
-  // counts the length of the isComplete
-  const completeCheckListCount = getTask?.checkList
-    ? getTask.checkList.filter(list => list.isComplete).length
-    : 0
-
-  // Counts the length of the array of checkList
-  const getChecklistLength = getTask?.checkList ? getTask.checkList.length : 0
-
-  // // grab both and calculate the percentage
-  const completePercentage =
-    completeCheckListCount > 0
-      ? (completeCheckListCount / getChecklistLength) * 100
-      : 0
-
-  // console.log(completePercentage)
   return (
     <div className="container p-10 w-[500px]">
       <div className="flex mb-5 items-center p-3 justify-between ">
@@ -131,7 +130,7 @@ function Index() {
           </span>
           <span className="mr-2 text-xl">Due Date: </span>
           <span className="text-blue-400 text-xl">
-            {formattedDate ? formattedDate : 'No Set Date'}
+            {!formattedDate ? 'No Set Date' : formattedDate}
           </span>
         </div>
         {/* Priority: low (4/10) */}
@@ -180,12 +179,12 @@ function Index() {
         <div className="w-full mt-4">
           <div className="flex items-center justify-between">
             <span className="text-xl">Task Complete</span>
-            <span className="text-xl">{completePercentage}%</span>
+            <span className="text-xl">{getTask?.percent ?? 0}%</span>
           </div>
           <div className="w-full  relative border rounded-xl h-[1rem] mt-4 ">
             <div
               className={`rounded-xl  bg-pink-300 h-[1rem]`}
-              style={{ width: `${completePercentage}%` }}
+              style={{ width: `${getTask?.percent ?? 0}%` }}
             ></div>
           </div>
         </div>
