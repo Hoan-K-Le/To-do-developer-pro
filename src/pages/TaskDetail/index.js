@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { TodoContext } from '../../contexts/taskContext'
-import { format } from 'date-fns'
+import { format, parse } from 'date-fns'
 
 function Index() {
   const { taskId } = useParams()
@@ -12,20 +12,6 @@ function Index() {
   const getTask = tasks.find(task => {
     if (task.id === taskId) return task
   })
-  let formattedDate = ''
-  if (getTask?.date) {
-    formattedDate = format(new Date(getTask.date), 'EEEE MMM d, h:mm a')
-  } else {
-  }
-  // calculate the date
-  // const currentDate = format(new Date(), 'EEEE MMM d, h:mm a')
-  const currentDate = new Date()
-  const dueDate = new Date(getTask.date)
-
-  console.log(currentDate.getTime(), dueDate.getTime())
-  const time_difference = dueDate.getTime() - currentDate.getTime()
-  const different_in_days = time_difference / (1000 * 3600 * 24)
-  console.log(different_in_days)
 
   const checklistComplete = checklistId => {
     const updatedCheckLists = tasks.map(task => {
@@ -62,6 +48,13 @@ function Index() {
     setTasks(updatedCheckLists)
     setInStorage(updatedCheckLists)
   }
+
+  const currentDate = new Date()
+  const selectedDate = getTask?.date
+  const parsedSelectedDate = parse(selectedDate, 'EEEE MMM dd', new Date())
+  // Calculate the difference based on the day of the week
+  const daysDifference = parsedSelectedDate.getDay() - currentDate.getDay()
+
   return (
     <div className="container p-10 w-[500px]">
       <div className="flex mb-5 items-center p-3 justify-between ">
@@ -107,10 +100,19 @@ function Index() {
       {/* details */}
       <div className="bg-white p-5 rounded-xl flex flex-col items-start  ">
         <div className="flex items-center gap-2 ml-1 mb-4">
-          <div className="bg-blue-400 h-[1rem] rounded-full w-[1rem]"></div>
+          <div
+            className={`${
+              daysDifference <= 3 && daysDifference > 0
+                ? 'bg-orange-300 font-bold'
+                : daysDifference <= 0
+                ? 'bg-red-500 font-bold'
+                : 'bg-blue-400 font-bold'
+            } h-[1rem] rounded-full w-[1rem]`}
+          ></div>
           <span className="font-bold text-xl">{getTask?.value ?? ''}</span>
         </div>
         {/* duedates priority etc etc */}
+
         <div className="flex items-center gap-2 mb-2">
           <span className="mr-1">
             <svg
@@ -129,10 +131,19 @@ function Index() {
             </svg>
           </span>
           <span className="mr-2 text-xl">Due Date: </span>
-          <span className="text-blue-400 text-xl">
-            {!formattedDate ? 'No Set Date' : formattedDate}
+          <span
+            className={`${
+              daysDifference <= 3 && daysDifference >= 0
+                ? 'text-orange-300 font-bold'
+                : daysDifference <= 0
+                ? 'text-red-500 font-bold'
+                : 'text-blue-400 font-bold'
+            } text-xl`}
+          >
+            {getTask?.date ?? 'No Set Date'}
           </span>
         </div>
+
         {/* Priority: low (4/10) */}
         <div className="flex items-center mt-1 gap-2 mb-2">
           <span className="mr-1">

@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { useContext, useState } from 'react'
 import { TodoContext } from '../../contexts/taskContext'
-import { format } from 'date-fns'
+import { format, parse } from 'date-fns'
 
 function Index() {
   const [sorted, SetSorted] = useState('default')
@@ -53,6 +53,36 @@ function Index() {
       sortedList.sort((a, b) => b.complexity - a.complexity)
       break
   }
+
+  const getDaysDiff = tasks.map(task => {
+    const currentDate = new Date()
+    const selectedDate = parse(task.date, 'EEEE MMM dd', new Date())
+    const timeDifference = selectedDate.getTime() - currentDate.getTime()
+    const daysDifference = Math.ceil(timeDifference / (1000 * 3600 * 24))
+
+    if (daysDifference <= 3 && daysDifference >= 0) {
+      return 'text-orange-300 font-bold'
+    } else if (daysDifference < 0) {
+      return 'text-red-500 font-bold '
+    } else {
+      return 'text-blue-400 font-bold'
+    }
+  })
+
+  const getDaysDiffBg = tasks.map(task => {
+    const currentDate = new Date()
+    const selectedDate = parse(task.date, 'EEEE MMM dd', new Date())
+    const timeDifference = selectedDate.getTime() - currentDate.getTime()
+    const daysDifference = Math.ceil(timeDifference / (1000 * 3600 * 24))
+
+    if (daysDifference <= 3 && daysDifference >= 0) {
+      return 'bg-orange-300'
+    } else if (daysDifference < 0) {
+      return 'bg-red-500'
+    } else {
+      return 'bg-blue-400'
+    }
+  })
 
   return (
     <div className="container w-[450px] flex flex-col items-center mt-4 ">
@@ -121,7 +151,9 @@ function Index() {
             {/* the blue mark with edit and checkmark button */}
             <div className="flex justify-between items-center mb-2">
               <div className="flex items-center gap-2">
-                <div className="bg-blue-400 h-[1rem] rounded-full w-[1rem]"></div>
+                <div
+                  className={`${getDaysDiffBg[i]} h-[1rem] rounded-full w-[1rem]`}
+                ></div>
                 <span className="font-bold">{task.value}</span>
               </div>
               <div className="flex gap-8">
@@ -183,10 +215,11 @@ function Index() {
                 </svg>
               </span>
               <span className="mr-2">Due Date: </span>
-              <span className="text-blue-400">
+              <span className={`${getDaysDiff[i]}`}>
                 {!task.date
                   ? 'No set date'
-                  : format(new Date(task.date), 'EEEE MMM d, h:mm a')}
+                  : format(new Date(task.date), 'EEEE MMM d')}
+                , {task.time}
               </span>
             </div>
             {/* Priority: low (4/10) */}

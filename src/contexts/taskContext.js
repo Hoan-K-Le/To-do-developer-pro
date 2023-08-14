@@ -1,6 +1,8 @@
 import { createContext, useState, useEffect } from 'react'
 import { uid } from 'uid'
 import { useNavigate } from 'react-router-dom'
+import { format } from 'date-fns'
+
 export const TodoContext = createContext()
 
 export const TaskProvider = ({ children }) => {
@@ -44,7 +46,12 @@ export const TaskProvider = ({ children }) => {
   const updateTask = updatedTask => {
     setTasks(prevTasks => {
       const updatedTasks = prevTasks.map(task =>
-        task.id === updatedTask.id ? { ...task, ...updatedTask } : task
+        task.id === updatedTask.id
+          ? {
+              ...task,
+              ...updatedTask,
+            }
+          : task
       )
       // Update the tasks in state
       setTasks(updatedTasks)
@@ -89,7 +96,7 @@ export const TaskProvider = ({ children }) => {
       value,
       priority: selectedPriority,
       complexity: selectedComplexity,
-      date: selectedDate,
+      date: format(new Date(selectedDate), 'EEEE MMM d'),
       time: selectedTime,
       percent: 0,
       isComplete: false,
@@ -119,7 +126,11 @@ export const TaskProvider = ({ children }) => {
     if (!checkList) return
     setCheckListItems(prevState => [
       ...prevState,
-      { id: uid(), value: checkList, isComplete: false },
+      {
+        id: uid(),
+        value: checkList,
+        isComplete: false,
+      },
     ])
     setCheckList('')
   }
