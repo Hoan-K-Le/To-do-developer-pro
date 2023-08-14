@@ -96,7 +96,10 @@ export const TaskProvider = ({ children }) => {
       value,
       priority: selectedPriority,
       complexity: selectedComplexity,
-      date: format(new Date(selectedDate), 'EEEE MMM d'),
+      // date: selectedDate,
+      date: !selectedDate
+        ? 'No Set Date'
+        : format(new Date(selectedDate), 'EEEE MMM d'),
       time: selectedTime,
       percent: 0,
       isComplete: false,

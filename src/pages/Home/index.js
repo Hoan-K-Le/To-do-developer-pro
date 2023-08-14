@@ -216,10 +216,11 @@ function Index() {
               </span>
               <span className="mr-2">Due Date: </span>
               <span className={`${getDaysDiff[i]}`}>
-                {!task.date
+                {task?.date ?? 'No set Date'}
+                {/* {!task.date
                   ? 'No set date'
                   : format(new Date(task.date), 'EEEE MMM d')}
-                , {task.time}
+                , {!task?.time ?? ''} */}
               </span>
             </div>
             {/* Priority: low (4/10) */}
