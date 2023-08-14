@@ -49,6 +49,27 @@ function Index() {
     setInStorage(updatedCheckLists)
   }
 
+  const handleRepeatTask = () => {
+    setTasks(prevTask => {
+      const updatedTask = prevTask.map(task => {
+        if (task.id === taskId) {
+          const updatedCheckList = task.checkList.map(list => {
+            return {
+              ...list,
+              isComplete: false,
+            }
+          })
+
+          return { ...task, percent: 0, checkList: updatedCheckList }
+        }
+        return task
+      })
+      setTasks(updatedTask)
+      setInStorage(updatedTask)
+      return updatedTask
+    })
+  }
+
   const currentDate = new Date()
   const selectedDate = getTask?.date
   const parsedSelectedDate = parse(selectedDate, 'EEEE MMM dd', new Date())
@@ -243,7 +264,10 @@ function Index() {
       {/* repeat/delete task */}
       <div className="flex flex-col items-center ">
         <div className="flex justify-center w-full  p-2 ">
-          <button className="flex justify-center bg-[#0D99FF] w-10/12 p-4 rounded-2xl items-center text-white gap-4 text-xl hover:text-gray-200">
+          <button
+            onClick={handleRepeatTask}
+            className="flex justify-center bg-[#0D99FF] w-10/12 p-4 rounded-2xl items-center text-white gap-4 text-xl hover:text-gray-200"
+          >
             <span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
