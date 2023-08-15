@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { TodoContext } from '../../contexts/taskContext'
-import { format, parse } from 'date-fns'
+import { parse } from 'date-fns'
 
 function Index() {
   const { taskId } = useParams()

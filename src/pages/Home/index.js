@@ -68,6 +68,15 @@ function Index() {
       return 'text-blue-400 font-bold'
     }
   })
+  const getBorderColor = percent => {
+    if (percent <= 25) {
+      return 'border-red-500'
+    } else if (percent <= 75) {
+      return 'border-yellow-500'
+    } else {
+      return 'border-green-500'
+    }
+  }
 
   const getDaysDiffBg = tasks.map(task => {
     const currentDate = new Date()
@@ -217,10 +226,6 @@ function Index() {
               <span className="mr-2">Due Date: </span>
               <span className={`${getDaysDiff[i]}`}>
                 {task?.date ?? 'No set Date'}
-                {/* {!task.date
-                  ? 'No set date'
-                  : format(new Date(task.date), 'EEEE MMM d')}
-                , {!task?.time ?? ''} */}
               </span>
             </div>
             {/* Priority: low (4/10) */}
@@ -284,8 +289,12 @@ function Index() {
                   ({!task.complexity ? '0' : task.complexity}/10)
                 </span>
               </div>
-              <div className=" border-4 outline-pink-500  p-1 right-0 absolute text-center rounded-full">
-                <span>{task?.percent ?? 0}%</span>
+              <div
+                className={`border-2 w-[4rem] h-[4rem] flex items-center justify-center p-1 right-0 absolute text-center rounded-full ${getBorderColor(
+                  task?.percent
+                )}`}
+              >
+                <span>{(task?.percent ?? 0).toFixed(0)}%</span>
               </div>
             </div>
             <div className="mt-2 items-center flex ">
