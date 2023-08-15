@@ -83,6 +83,9 @@ function Index() {
   }
 
   const getDaysDiffBg = tasks.map(task => {
+    if (!task.date) {
+      return 'bg-blue-400'
+    }
     const currentDate = new Date()
     const selectedDate = task.date
       ? parse(task.date, 'yyyy-MM-dd', new Date())
@@ -94,7 +97,7 @@ function Index() {
 
     if (daysDifference <= 3 && daysDifference >= 0) {
       return 'bg-orange-300'
-    } else if (daysDifference < 0) {
+    } else if (daysDifference <= 0) {
       return 'bg-red-500'
     } else {
       return 'bg-blue-400'
