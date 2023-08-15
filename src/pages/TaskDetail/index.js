@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { TodoContext } from '../../contexts/taskContext'
-import { parse } from 'date-fns'
+import { parse, format } from 'date-fns'
 
 function Index() {
   const { taskId } = useParams()
@@ -9,9 +9,7 @@ function Index() {
     TodoContext
   )
 
-  const getTask = tasks.find(task => {
-    if (task.id === taskId) return task
-  })
+  const getTask = tasks.find(task => task.id === taskId) || {}
 
   const checklistComplete = checklistId => {
     const updatedCheckLists = tasks.map(task => {
@@ -71,10 +69,20 @@ function Index() {
   }
 
   const currentDate = new Date()
-  const selectedDate = getTask?.date
-  const parsedSelectedDate = parse(selectedDate, 'EEEE MMM dd', new Date())
-  // Calculate the difference based on the day of the week
-  const daysDifference = parsedSelectedDate.getDay() - currentDate.getDay()
+  const selectedDate = getTask.date
+
+  // add a conditinal rendering just incase if the selectDate is empty or undefined
+  const parsedSelectedDate = selectedDate
+    ? parse(selectedDate, 'yyyy-MM-dd', new Date())
+    : null
+
+  const formattedDate = parsedSelectedDate
+    ? format(parsedSelectedDate, 'EEEE MMM dd')
+    : null
+
+  const daysDifference = parsedSelectedDate
+    ? Math.floor((parsedSelectedDate - currentDate) / (1000 * 60 * 60 * 24))
+    : 0
 
   return (
     <div className="container p-10 w-[500px]">
@@ -123,7 +131,7 @@ function Index() {
         <div className="flex items-center gap-2 ml-1 mb-4">
           <div
             className={`${
-              daysDifference <= 3 && daysDifference > 0
+              daysDifference <= 3 && daysDifference >= 0
                 ? 'bg-orange-300 font-bold'
                 : daysDifference <= 0
                 ? 'bg-red-500 font-bold'
@@ -133,37 +141,38 @@ function Index() {
           <span className="font-bold text-xl">{getTask?.value ?? ''}</span>
         </div>
         {/* duedates priority etc etc */}
-
-        <div className="flex items-center gap-2 mb-2">
-          <span className="mr-1">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              class="w-6 h-6"
+        {getTask && (
+          <div className="flex items-center gap-2 mb-2">
+            <span className="mr-1">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-6 h-6"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"
+                />
+              </svg>
+            </span>
+            <span className="mr-2 text-xl">Due Date: </span>
+            <span
+              className={`${
+                daysDifference <= 3 && daysDifference >= 0
+                  ? 'text-orange-300 font-bold'
+                  : daysDifference <= 0
+                  ? 'text-red-500 font-bold'
+                  : 'text-blue-400 font-bold'
+              } text-xl`}
             >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"
-              />
-            </svg>
-          </span>
-          <span className="mr-2 text-xl">Due Date: </span>
-          <span
-            className={`${
-              daysDifference <= 3 && daysDifference >= 0
-                ? 'text-orange-300 font-bold'
-                : daysDifference <= 0
-                ? 'text-red-500 font-bold'
-                : 'text-blue-400 font-bold'
-            } text-xl`}
-          >
-            {getTask?.date ?? 'No Set Date'}
-          </span>
-        </div>
+              {getTask?.date ? formattedDate : 'No Set Date'}
+            </span>
+          </div>
+        )}
 
         {/* Priority: low (4/10) */}
         <div className="flex items-center mt-1 gap-2 mb-2">

@@ -1,7 +1,6 @@
 import { createContext, useState, useEffect } from 'react'
 import { uid } from 'uid'
 import { useNavigate } from 'react-router-dom'
-import { format } from 'date-fns'
 
 export const TodoContext = createContext()
 
@@ -96,10 +95,7 @@ export const TaskProvider = ({ children }) => {
       value,
       priority: selectedPriority,
       complexity: selectedComplexity,
-      // date: selectedDate,
-      date: !selectedDate
-        ? 'No Set Date'
-        : format(new Date(selectedDate), 'EEEE MMM d'),
+      date: selectedDate,
       time: selectedTime,
       percent: 0,
       isComplete: false,

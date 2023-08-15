@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { useContext, useState } from 'react'
 import { TodoContext } from '../../contexts/taskContext'
-import { format, parse } from 'date-fns'
+import { parse } from 'date-fns'
 
 function Index() {
   const [sorted, SetSorted] = useState('default')
@@ -56,9 +56,13 @@ function Index() {
 
   const getDaysDiff = tasks.map(task => {
     const currentDate = new Date()
-    const selectedDate = parse(task.date, 'EEEE MMM dd', new Date())
-    const timeDifference = selectedDate.getTime() - currentDate.getTime()
-    const daysDifference = Math.ceil(timeDifference / (1000 * 3600 * 24))
+    const selectedDate = task.date
+      ? parse(task.date, 'yyyy-MM-dd', new Date())
+      : null
+
+    const daysDifference = selectedDate
+      ? Math.ceil((selectedDate - currentDate) / (1000 * 60 * 60 * 24))
+      : 0
 
     if (daysDifference <= 3 && daysDifference >= 0) {
       return 'text-orange-300 font-bold'
@@ -80,9 +84,13 @@ function Index() {
 
   const getDaysDiffBg = tasks.map(task => {
     const currentDate = new Date()
-    const selectedDate = parse(task.date, 'EEEE MMM dd', new Date())
-    const timeDifference = selectedDate.getTime() - currentDate.getTime()
-    const daysDifference = Math.ceil(timeDifference / (1000 * 3600 * 24))
+    const selectedDate = task.date
+      ? parse(task.date, 'yyyy-MM-dd', new Date())
+      : null
+
+    const daysDifference = selectedDate
+      ? Math.floor((selectedDate - currentDate) / (1000 * 60 * 60 * 24))
+      : 0
 
     if (daysDifference <= 3 && daysDifference >= 0) {
       return 'bg-orange-300'
