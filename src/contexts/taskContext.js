@@ -5,41 +5,16 @@ import { useNavigate } from 'react-router-dom'
 export const TodoContext = createContext()
 
 export const TaskProvider = ({ children }) => {
-  const [priority, setPriority] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
-  const [complexity, setComplexity] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
-  const [selectedPriority, setSelectedPriority] = useState(null)
-  const [selectedComplexity, setSelectedComplexity] = useState(null)
-  const [selectedDate, setSelectedDate] = useState('')
-  const [selectedTime, setSelectedTime] = useState('')
   const [tasks, setTasks] = useState([])
-  const [value, setValue] = useState('')
-  const [checkList, setCheckList] = useState('')
-  const [checkListItems, setCheckListItems] = useState([])
-  const [tagValue, setTagValue] = useState('')
 
   const navigate = useNavigate()
 
-  const handlePriority = selectPriority => {
-    if (!selectPriority) return
-    setSelectedPriority(selectPriority)
-  }
-  const handleComplexity = selectComplexity => {
-    if (!selectComplexity) return
-    setSelectedComplexity(selectComplexity)
-  }
-
-  const handleDate = selectDate => {
-    if (!selectDate) return
-    setSelectedDate(selectDate)
-  }
-
-  const handleTime = selectTime => {
-    if (!selectTime) return
-    setSelectedTime(selectTime)
-  }
-
   const setInStorage = list => {
     return localStorage.setItem('tasks', JSON.stringify(list))
+  }
+
+  const getTaskObj = taskId => {
+    return tasks.find(task => task.id === taskId)
   }
 
   const updateTask = updatedTask => {
@@ -61,79 +36,6 @@ export const TaskProvider = ({ children }) => {
     })
   }
 
-  const handleDelete = taskId => {
-    setTasks(prevTask => {
-      if (!prevTask) return
-      const updatedTask = prevTask.filter(task => task.id !== taskId)
-      setInStorage(updatedTask)
-      setTasks(updatedTask)
-      navigate('/')
-      return updatedTask
-    })
-  }
-
-  const handleCompleteTask = taskId => {
-    setTasks(prevTask => {
-      const updatedTasks = prevTask.map(task => {
-        if (task.id === taskId) {
-          return {
-            ...task,
-            isComplete: !task.isComplete,
-          }
-        }
-        return task
-      })
-      setInStorage(updatedTasks)
-      setTasks(updatedTasks)
-      return updatedTasks
-    })
-  }
-
-  const addTask = () => {
-    if (!value) return
-    const newTask = {
-      value,
-      priority: selectedPriority,
-      complexity: selectedComplexity,
-      date: selectedDate,
-      time: selectedTime,
-      percent: 0,
-      isComplete: false,
-      checkList: checkListItems,
-      tags: !tagValue ? [] : [tagValue],
-      id: uid(),
-    }
-    setValue('')
-    setSelectedComplexity(null)
-    setSelectedPriority(null)
-    setSelectedDate('')
-    setSelectedTime('')
-    setTagValue('')
-    setCheckListItems([])
-    navigate('/')
-    setTasks(prevTask => [...prevTask, newTask])
-    setInStorage([...tasks, newTask])
-  }
-
-  const handleRemoveCheckList = id => {
-    setCheckListItems(prevState =>
-      prevState.filter(checkList => checkList.id !== id)
-    )
-  }
-
-  const handleCheckList = () => {
-    if (!checkList) return
-    setCheckListItems(prevState => [
-      ...prevState,
-      {
-        id: uid(),
-        value: checkList,
-        isComplete: false,
-      },
-    ])
-    setCheckList('')
-  }
-
   useEffect(() => {
     const storedTasks = JSON.parse(localStorage.getItem('tasks'))
     if (storedTasks) {
@@ -148,50 +50,11 @@ export const TaskProvider = ({ children }) => {
         ///////////////
         // Tasks related
         tasks,
-        addTask,
         updateTask,
         setTasks,
-        ///////////////
-        // Values/tags
-        value,
-        tagValue,
-        setTagValue,
-        setValue,
-        ////////////////
-        // Checklist related stuff
-        checkList,
-        setCheckList,
-        checkListItems,
-        setCheckListItems,
-        handleCheckList,
-        handleRemoveCheckList,
-        ///////////////
-        // Complexities
-        complexity,
-        handleComplexity,
-        selectedComplexity,
-        setSelectedComplexity,
-        ///////////////
-        // Priorities
-        priority,
-        setPriority,
-        handlePriority,
-        selectedPriority,
-        setSelectedPriority,
-        //////////////
-        // Time/Date
-        handleTime,
-        handleDate,
-        selectedDate,
-        selectedTime,
-        setSelectedTime,
-        setSelectedDate,
         /////////////
-
+        getTaskObj,
         // Delete
-        handleDelete,
-        // completeTasks
-        handleCompleteTask,
       }}
     >
       {children}

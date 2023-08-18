@@ -2,17 +2,31 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { useContext, useState } from 'react'
 import { TodoContext } from '../../contexts/taskContext'
-import { parse } from 'date-fns'
+import { parse, format } from 'date-fns'
 
 function Index() {
   const [sorted, SetSorted] = useState('default')
   const [filterValue, setFilterValue] = useState('')
   const [tags, setTags] = useState('')
 
-  const { tasks, handleCompleteTask } = useContext(TodoContext)
+  const { tasks, setInStorage, setTasks } = useContext(TodoContext)
 
   const handleTags = e => {
     setTags(e.target.value)
+  }
+
+  const handleCompleteTask = taskId => {
+    const updatedTask = tasks.map(task => {
+      if (task.id === taskId) {
+        return {
+          ...task,
+          isComplete: !task.isComplete,
+        }
+      }
+      return task
+    })
+    setInStorage(updatedTask)
+    setTasks(updatedTask)
   }
 
   const handleFilter = e => {
@@ -54,24 +68,6 @@ function Index() {
       break
   }
 
-  const getDaysDiff = tasks.map(task => {
-    const currentDate = new Date()
-    const selectedDate = task.date
-      ? parse(task.date, 'yyyy-MM-dd', new Date())
-      : null
-
-    const daysDifference = selectedDate
-      ? Math.ceil((selectedDate - currentDate) / (1000 * 60 * 60 * 24))
-      : 0
-
-    if (daysDifference <= 3 && daysDifference >= 0) {
-      return 'text-orange-300 font-bold'
-    } else if (daysDifference < 0) {
-      return 'text-red-500 font-bold '
-    } else {
-      return 'text-blue-400 font-bold'
-    }
-  })
   const getBorderColor = percent => {
     if (percent <= 25) {
       return 'border-red-500'
@@ -81,6 +77,37 @@ function Index() {
       return 'border-green-500'
     }
   }
+
+  const getDaysDiff = tasks.map(task => {
+    const currentDate = new Date()
+    const selectedDate = task.date
+      ? parse(task.date, 'yyyy-MM-dd', new Date())
+      : null
+
+    const daysDifference = selectedDate
+      ? Math.floor((selectedDate - currentDate) / (1000 * 60 * 60 * 24))
+      : 0
+
+    if (daysDifference <= 3 && daysDifference >= 0) {
+      return 'text-orange-300 font-bold'
+    } else if (daysDifference <= 0) {
+      return 'text-red-500 font-bold '
+    } else {
+      return 'text-blue-400 font-bold'
+    }
+  })
+  const convertDate = tasks.map(task => {
+    if (!task.date) {
+      return null
+    }
+    const selectedDate = task.date
+      ? parse(task.date, 'yyyy-MM-dd', new Date())
+      : null
+    const formattedDate = selectedDate
+      ? format(selectedDate, 'EEEE MMMM dd')
+      : null
+    return formattedDate
+  })
 
   const getDaysDiffBg = tasks.map(task => {
     if (!task.date) {
@@ -236,7 +263,8 @@ function Index() {
               </span>
               <span className="mr-2">Due Date: </span>
               <span className={`${getDaysDiff[i]}`}>
-                {task?.date ?? 'No set Date'}
+                {/* {task?.date ?? 'No set Date'} */}
+                {convertDate[i]}
               </span>
             </div>
             {/* Priority: low (4/10) */}

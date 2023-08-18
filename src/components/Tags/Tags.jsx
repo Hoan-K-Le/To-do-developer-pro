@@ -1,14 +1,19 @@
 import React from 'react'
-import { useContext } from 'react'
-import { TodoContext } from '../../contexts/taskContext'
+import { useContext, useState } from 'react'
 
-function Tags() {
-  const { setTagValue, tagValue } = useContext(TodoContext)
+function Tags({ handleTags }) {
+  const [tagValue, setTagValue] = useState('')
+
+  const handleTagChange = e => {
+    setTagValue(e.target.value)
+    handleTags(e.target.value)
+  }
+
   return (
     <div className="pt-4">
       <p className="text-xl mb-4">Add Tags</p>
       <input
-        onChange={e => setTagValue(e.target.value)}
+        onChange={handleTagChange}
         value={tagValue}
         className="w-full p-2 rounded-xl"
         type="text"

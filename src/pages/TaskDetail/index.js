@@ -2,14 +2,13 @@ import React, { useContext } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { TodoContext } from '../../contexts/taskContext'
 import { parse, format } from 'date-fns'
+import { useNavigate } from 'react-router-dom'
 
 function Index() {
   const { taskId } = useParams()
-  const { tasks, handleDelete, setTasks, setInStorage } = useContext(
-    TodoContext
-  )
-
-  const getTask = tasks.find(task => task.id === taskId) || {}
+  const { tasks, setTasks, setInStorage, getTaskObj } = useContext(TodoContext)
+  const getTask = getTaskObj(taskId)
+  const navigate = useNavigate()
 
   const checklistComplete = checklistId => {
     const updatedCheckLists = tasks.map(task => {
@@ -45,6 +44,16 @@ function Index() {
     // Update the state with the updated checklist
     setTasks(updatedCheckLists)
     setInStorage(updatedCheckLists)
+  }
+
+  const handleDelete = taskId => {
+    setTasks(prevTask => {
+      if (!prevTask) return
+      const updatedTask = prevTask.filter(task => task.id !== taskId)
+      setInStorage(updatedTask)
+      setTasks(updatedTask)
+    })
+    navigate('/')
   }
 
   const handleRepeatTask = () => {
@@ -299,7 +308,7 @@ function Index() {
 
         <div className="flex justify-center w-full p-2 ">
           <button
-            onClick={() => handleDelete(taskId)}
+            onClick={() => handleDelete(getTask.id)}
             className="flex justify-center bg-[#ffe0de] w-10/12 p-4 rounded-2xl items-center text-black gap-4 text-xl hover:text-green-700"
           >
             <span>

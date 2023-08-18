@@ -1,15 +1,32 @@
 import React from 'react'
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
+import { uid } from 'uid'
 import { TodoContext } from '../../contexts/taskContext'
 
-function SubCheckList() {
-  const {
-    checkList,
-    setCheckList,
-    handleCheckList,
-    handleRemoveCheckList,
-    checkListItems,
-  } = useContext(TodoContext)
+function SubCheckList({ handleCheckList, checklistItems }) {
+  const [checkList, setCheckList] = useState('')
+  const [checkListItems, setCheckListItems] = useState([])
+
+  const handleRemoveCheckList = id => {
+    const updatedChecklist = checkListItems.filter(
+      checkList => checkList.id !== id
+    )
+
+    setCheckListItems(updatedChecklist)
+    handleCheckList(updatedChecklist)
+  }
+
+  const handleAddCheckList = () => {
+    if (!checkList) return
+    const newChecklist = [
+      ...checklistItems,
+      { id: uid(), value: checkList, isComplete: false },
+    ]
+    setCheckListItems(newChecklist)
+    handleCheckList(newChecklist)
+    setCheckList('')
+  }
+
   return (
     <>
       <p className="text-xl mt-4">Add Checklist</p>
@@ -22,7 +39,7 @@ function SubCheckList() {
           placeholder="Add item"
         />
         <button
-          onClick={handleCheckList}
+          onClick={handleAddCheckList}
           className="absolute bg-[#0D99FF] p-1 text-white rounded-full right-3 top-5 text-3xl"
         >
           <svg
