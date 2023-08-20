@@ -1,6 +1,6 @@
 import { useState, useContext, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { TodoContext, Task } from '../../contexts/taskContext'
+import { TodoContext, Task, ChecklistItems } from '../../contexts/taskContext'
 import { uid } from 'uid'
 
 function EditTask({}) {
@@ -76,7 +76,7 @@ function EditTask({}) {
 
   const handleRemoveCheckList = (listId: string) => {
     const updatedTask = editTask.checkList.filter(
-      (item: Task) => item.id !== listId
+      (item: ChecklistItems) => item.id !== listId
     )
     // setNewChecklistItems(updatedTask)
     handleEditChange({
