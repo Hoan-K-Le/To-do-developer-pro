@@ -1,59 +1,53 @@
 import React, { useState, useContext, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { TodoContext } from '../../contexts/taskContext'
-import {
-  SelectPriority,
-  SelectComplexity,
-} from '../../components/SelectLevels/SelectLevels'
-import TimeInput from '../../components/TimeInput/TimeInput'
-import SubCheckList from '../../components/Subcheck/SubCheckList'
 import { uid } from 'uid'
-import Tags from '../../components/Tags/Tags'
-function EditTask() {
+function EditTask({}) {
   const [complexity, setComplexity] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
   const [priority, setPriority] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
-  const [newValue, setNewValue] = useState('')
-  const [newPriority, setNewPriority] = useState('')
-  const [newComplexity, setNewComplexity] = useState('')
-  const [newSelectedDate, setNewSelectedDate] = useState(null)
-  const [newSelectedTime, setNewSelectedTime] = useState(null)
   const [newChecklist, setNewChecklist] = useState('')
-  const [newChecklistItems, setNewChecklistItems] = useState([])
-  const [newTag, setNewTag] = useState('')
-  const { tasks, updateTask, getTaskObj } = useContext(TodoContext)
+  const [editTask, setEditTask] = useState({
+    value: '',
+    priority: 0,
+    complexity: 0,
+    date: null,
+    time: null,
+    percent: 0,
+    isComplete: false,
+    checkList: [],
+    tags: [],
+    id: uid(),
+  })
+  const { updateTask, getTaskObj } = useContext(TodoContext)
 
   const { taskId } = useParams()
 
   const taskToEdit = getTaskObj(taskId)
 
-  const handlePriority = selectPriority => {
-    setNewPriority(selectPriority)
-  }
-
-  const handleComplexity = selectComplexity => {
-    setNewComplexity(selectComplexity)
-  }
-
-  const handleDateChange = selectDate => {
-    setNewSelectedDate(selectDate)
-  }
-  const handleTimeChange = selectTime => {
-    setNewSelectedTime(selectTime)
+  const handleEditChange = val => {
+    setEditTask(prevTask => ({
+      ...prevTask,
+      [val.key]: val.value,
+    }))
   }
 
   const handleAddCheckList = () => {
     if (!newChecklist) return
     const newChecklists = [
-      ...newChecklistItems,
+      ...editTask.checkList,
       { id: uid(), value: newChecklist, isComplete: false },
     ]
-    setNewChecklistItems(newChecklists)
+    setEditTask(prevTask => ({
+      ...prevTask,
+      checkList: newChecklists,
+    }))
     setNewChecklist('')
   }
 
   const handleRemoveCheckList = listId => {
-    const updatedTask = newChecklistItems.filter(item => item.id !== listId)
-    setNewChecklistItems(updatedTask)
+    const updatedTask = editTask.checkList.filter(item => item.id !== listId)
+    // setNewChecklistItems(updatedTask)
+    handleEditChange({ key: 'checkList', value: updatedTask })
   }
 
   const handleSave = () => {
@@ -61,40 +55,29 @@ function EditTask() {
     if (taskToEdit) {
       const updatedTask = {
         ...taskToEdit,
-        value: newValue,
-        priority: newPriority,
-        complexity: newComplexity,
-        date: newSelectedDate,
-        time: newSelectedTime,
-        checkList: newChecklistItems,
-        tags: !newTag ? [] : [newTag],
+        value: editTask.value,
+        priority: editTask.priority,
+        complexity: editTask.complexity,
+        date: editTask.date,
+        time: editTask.time,
+        checkList: editTask.checkList,
+        tags: !editTask.tags ? [] : [editTask.tags],
       }
       updateTask(updatedTask)
     }
-    clearEdit()
-  }
-  const clearEdit = () => {
-    setNewPriority('')
-    setNewComplexity('')
-    setNewChecklistItems([])
-    setNewSelectedTime(null)
-    setNewSelectedDate(null)
-    setNewChecklist('')
-    setNewTag('')
-  }
-
-  const handleTagChange = e => {
-    setNewTag(e.target.value)
   }
 
   useEffect(() => {
     if (taskToEdit) {
-      setNewValue(taskToEdit.value)
-      setNewPriority(taskToEdit.priority)
-      setNewComplexity(taskToEdit.complexity)
-      setNewSelectedTime(taskToEdit.time)
-      setNewSelectedDate(taskToEdit.date)
-      setNewTag(taskToEdit.tags)
+      setEditTask(prevTask => ({
+        ...prevTask,
+        value: taskToEdit.value,
+        priority: taskToEdit.priority,
+        complexity: taskToEdit.complexity,
+        time: taskToEdit.time,
+        date: taskToEdit.date,
+        tags: taskToEdit.tags,
+      }))
     }
   }, [taskToEdit])
 
@@ -123,8 +106,10 @@ function EditTask() {
       </div>
       <p className="text-lg mb-5">Task Name</p>
       <input
-        onChange={e => setNewValue(e.target.value)}
-        value={newValue}
+        onChange={e =>
+          handleEditChange({ key: 'value', value: e.target.value })
+        }
+        value={editTask.value}
         className="border px-20 rounded-2xl text-lg py-2"
         type="text"
         placeholder="Edit Task"
@@ -135,9 +120,11 @@ function EditTask() {
           priority.map(num => (
             <div className="">
               <button
-                onClick={() => handlePriority(num)}
+                onClick={() =>
+                  handleEditChange({ key: 'priority', value: num })
+                }
                 className={` w-7 bg-blue-100 rounded-full ${
-                  newPriority === num ? 'border bg-blue-300' : ''
+                  editTask.priority === num ? 'border bg-blue-300' : ''
                 }`}
                 value={num}
               >
@@ -152,9 +139,11 @@ function EditTask() {
           complexity.map(num => (
             <div>
               <button
-                onClick={() => handleComplexity(num)}
+                onClick={() =>
+                  handleEditChange({ key: 'complexity', value: num })
+                }
                 className={`w-7 bg-blue-100 rounded-full ${
-                  newComplexity === num ? 'border bg-blue-300' : ''
+                  editTask.complexity === num ? 'border bg-blue-300' : ''
                 }`}
                 value={num}
               >
@@ -166,13 +155,17 @@ function EditTask() {
       <div className="flex justify-between mt-5">
         <input
           type="date"
-          onChange={e => handleDateChange(e.target.value)}
+          onChange={e =>
+            handleEditChange({ key: 'date', value: e.target.value })
+          }
           className="border rounded-xl px-2 py-2"
-          value={newSelectedDate}
+          value={editTask.date}
         />
         <input
-          onChange={e => handleTimeChange(e.target.value)}
-          value={newSelectedTime}
+          onChange={e =>
+            handleEditChange({ key: 'time', value: e.target.value })
+          }
+          value={editTask.time}
           type="time"
           className="border rounded-xl px-4 py-2"
         />
@@ -206,8 +199,8 @@ function EditTask() {
           </svg>
         </button>
       </div>
-      {newChecklistItems.length > 0 &&
-        newChecklistItems.map(item => (
+      {editTask.checkList.length > 0 &&
+        editTask.checkList.map(item => (
           <div className="border flex p-2 my-2 relative rounded-xl bg-white">
             <p className="text-xl">{item.value}</p>
             <button
@@ -234,8 +227,10 @@ function EditTask() {
       <div className="pt-4">
         <p className="text-xl mb-4">Add Tags</p>
         <input
-          onChange={handleTagChange}
-          value={newTag}
+          onChange={e =>
+            handleEditChange({ key: 'tags', value: e.target.value })
+          }
+          value={editTask.tags}
           className="w-full p-2 rounded-xl"
           type="text"
           placeholder="Tag1, Tag2, Tag3, ..."

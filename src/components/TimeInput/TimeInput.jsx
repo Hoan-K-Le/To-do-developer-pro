@@ -2,19 +2,19 @@ import React from 'react'
 import { useState } from 'react'
 import moment from 'moment'
 
-function TimeInput({ handleTime, handleDate }) {
+function TimeInput({ handleChange }) {
   const [selectedDate, setSelectedDate] = useState('')
   const [selectedTime, setSelectedTime] = useState('')
 
   const handleDateChange = e => {
     const dateValue = e.target.value
-    handleDate(dateValue)
+    handleChange({ key: 'date', value: dateValue })
     setSelectedDate(dateValue)
   }
 
   const handleTimeChange = e => {
     const timeValue = e.target.value
-    handleTime(timeValue)
+    handleChange({ key: 'time', value: timeValue })
     setSelectedTime(timeValue)
   }
 

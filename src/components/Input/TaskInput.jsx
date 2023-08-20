@@ -1,14 +1,12 @@
 import React from 'react'
-import { useContext, useState } from 'react'
-import { TodoContext } from '../../contexts/taskContext'
+import { useState } from 'react'
 
-function TaskInput({ handleInputValue }) {
+function TaskInput({ handleChange }) {
   const [value, setValue] = useState('')
-  const { tasks } = useContext(TodoContext)
 
   const handleInputChange = e => {
     setValue(e.target.value)
-    handleInputValue(e.target.value)
+    handleChange({ key: 'value', value: e.target.value })
   }
 
   return (
@@ -17,6 +15,7 @@ function TaskInput({ handleInputValue }) {
       <input
         onChange={handleInputChange}
         value={value}
+        name="value"
         className="border  px-20 rounded-2xl text-lg py-2 "
         type="text"
         placeholder="Name of task..."

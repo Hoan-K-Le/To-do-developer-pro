@@ -28,50 +28,11 @@ function Index() {
   })
 
   const navigate = useNavigate()
-  const handleInputValue = val => {
-    if (!val) return
-    setTask(prevTask => ({
-      ...prevTask,
-      value: val,
-    }))
-  }
 
-  const handleCheckList = checklist => {
-    setTask(prevState => ({
-      ...prevState,
-      checkList: checklist,
-    }))
-  }
-
-  const handleComplexity = val => {
+  const handleChange = val => {
     setTask(prevTask => ({
       ...prevTask,
-      complexity: val,
-    }))
-  }
-  const handlePriority = val => {
-    setTask(prevTask => ({
-      ...prevTask,
-      priority: val,
-    }))
-  }
-
-  const handleTags = val => {
-    setTask(prevTask => ({
-      ...prevTask,
-      tags: !val ? [] : [val],
-    }))
-  }
-  const handleDate = val => {
-    setTask(prevTask => ({
-      ...prevTask,
-      date: val,
-    }))
-  }
-  const handleTime = val => {
-    setTask(prevTask => ({
-      ...prevTask,
-      time: val,
+      [val.key]: val.value,
     }))
   }
 
@@ -100,15 +61,15 @@ function Index() {
   return (
     <div className="container p-10">
       <TaskHeader />
-      <TaskInput handleInputValue={handleInputValue} />
-      <SelectPriority handlePriority={handlePriority} />
-      <SelectComplexity handleComplexity={handleComplexity} />
-      <TimeInput handleDate={handleDate} handleTime={handleTime} />
+      <TaskInput handleChange={handleChange} />
+      <SelectPriority handleChange={handleChange} />
+      <SelectComplexity handleChange={handleChange} />
+      <TimeInput handleChange={handleChange} />
       <SubCheckList
+        handleChange={handleChange}
         checklistItems={task.checkList}
-        handleCheckList={handleCheckList}
       />
-      <Tags handleTags={handleTags} />
+      <Tags handleChange={handleChange} />
       <div className="flex justify-center">
         <button
           onClick={addTask}

@@ -3,7 +3,7 @@ import { useContext, useState } from 'react'
 import { uid } from 'uid'
 import { TodoContext } from '../../contexts/taskContext'
 
-function SubCheckList({ handleCheckList, checklistItems }) {
+function SubCheckList({ handleChange, checklistItems }) {
   const [checkList, setCheckList] = useState('')
   const [checkListItems, setCheckListItems] = useState([])
 
@@ -13,7 +13,7 @@ function SubCheckList({ handleCheckList, checklistItems }) {
     )
 
     setCheckListItems(updatedChecklist)
-    handleCheckList(updatedChecklist)
+    handleChange({ key: 'checkList', value: updatedChecklist })
   }
 
   const handleAddCheckList = () => {
@@ -23,7 +23,7 @@ function SubCheckList({ handleCheckList, checklistItems }) {
       { id: uid(), value: checkList, isComplete: false },
     ]
     setCheckListItems(newChecklist)
-    handleCheckList(newChecklist)
+    handleChange({ key: 'checkList', value: newChecklist })
     setCheckList('')
   }
 

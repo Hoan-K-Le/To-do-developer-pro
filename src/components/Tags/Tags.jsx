@@ -1,12 +1,12 @@
 import React from 'react'
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 
-function Tags({ handleTags }) {
+function Tags({ handleChange }) {
   const [tagValue, setTagValue] = useState('')
 
   const handleTagChange = e => {
     setTagValue(e.target.value)
-    handleTags(e.target.value)
+    handleChange({ key: 'tags', value: e.target.value })
   }
 
   return (

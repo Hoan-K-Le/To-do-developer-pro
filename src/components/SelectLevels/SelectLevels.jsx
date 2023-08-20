@@ -2,16 +2,14 @@ import React from 'react'
 import { useContext, useState } from 'react'
 import { TodoContext } from '../../contexts/taskContext'
 
-export const SelectPriority = ({ handlePriority }) => {
+export const SelectPriority = ({ handleChange }) => {
   const [priority, setPriority] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
 
   const [selectedPriority, setSelectedPriority] = useState(null)
 
-  // const { priority, handlePriority, selectedPriority } = useContext(TodoContext)
-
   const handleAddPriority = selectPriority => {
     if (!selectPriority) return
-    handlePriority(selectPriority)
+    handleChange({ key: 'priority', value: selectPriority })
     setSelectedPriority(selectPriority)
   }
 
@@ -39,15 +37,12 @@ export const SelectPriority = ({ handlePriority }) => {
   )
 }
 
-export const SelectComplexity = ({ handleComplexity }) => {
-  // const { complexity, handleComplexity, selectedComplexity } = useContext(
-  //   TodoContext
-  // )
+export const SelectComplexity = ({ handleChange }) => {
   const [complexity, setComplexity] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
   const [selectedComplexity, setSelectedComplexity] = useState(null)
   const handleAddComplexity = selectComplexity => {
     if (!selectComplexity) return
-    handleComplexity(selectComplexity)
+    handleChange({ key: 'complexity', value: selectComplexity })
     setSelectedComplexity(selectComplexity)
   }
 
