@@ -1,13 +1,27 @@
 import React from 'react'
 import { useContext, useState } from 'react'
 import { TodoContext } from '../../contexts/taskContext'
+interface ChangeProps {
+  handleChange: (data: { key: string; value: number }) => void
+}
 
-export const SelectPriority = ({ handleChange }) => {
-  const [priority, setPriority] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+export const SelectPriority = ({ handleChange }: ChangeProps) => {
+  const [priority, setPriority] = useState<number[]>([
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+  ])
 
-  const [selectedPriority, setSelectedPriority] = useState(null)
+  const [selectedPriority, setSelectedPriority] = useState<number | null>(null)
 
-  const handleAddPriority = selectPriority => {
+  const handleAddPriority = (selectPriority: number) => {
     if (!selectPriority) return
     handleChange({ key: 'priority', value: selectPriority })
     setSelectedPriority(selectPriority)
@@ -37,10 +51,12 @@ export const SelectPriority = ({ handleChange }) => {
   )
 }
 
-export const SelectComplexity = ({ handleChange }) => {
+export const SelectComplexity = ({ handleChange }: ChangeProps) => {
   const [complexity, setComplexity] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
-  const [selectedComplexity, setSelectedComplexity] = useState(null)
-  const handleAddComplexity = selectComplexity => {
+  const [selectedComplexity, setSelectedComplexity] = useState<number | null>(
+    null
+  )
+  const handleAddComplexity = (selectComplexity: number) => {
     if (!selectComplexity) return
     handleChange({ key: 'complexity', value: selectComplexity })
     setSelectedComplexity(selectComplexity)

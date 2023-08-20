@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { uid } from 'uid'
 import TaskHeader from '../../components/TaskHeader/TaskHeader'
 import TaskInput from '../../components/Input/TaskInput'
@@ -14,7 +14,19 @@ import { useNavigate } from 'react-router-dom'
 function Index() {
   // const { addTask } = useContext(TodoContext)
   const { tasks, setInStorage, setTasks } = useContext(TodoContext)
-  const [task, setTask] = useState({
+  type Task = {
+    value: string
+    priority: number
+    complexity: number
+    date: any
+    time: any
+    percent: number
+    isComplete: boolean
+    checkList: any[]
+    tags: string[]
+    id: string
+  }
+  const [task, setTask] = useState<Task>({
     value: '',
     priority: 0,
     complexity: 0,
@@ -29,14 +41,14 @@ function Index() {
 
   const navigate = useNavigate()
 
-  const handleChange = val => {
+  const handleChange = (val: any) => {
     setTask(prevTask => ({
       ...prevTask,
       [val.key]: val.value,
     }))
   }
 
-  const addTask = e => {
+  const addTask = (e: any) => {
     e.preventDefault()
     if (task.value) {
       const updatedTask = [...tasks, task]

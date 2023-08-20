@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { TodoContext } from '../../contexts/taskContext'
+import { TodoContext, Task, ChecklistItems } from '../../contexts/taskContext'
 import { parse, format } from 'date-fns'
 import { useNavigate } from 'react-router-dom'
 
@@ -10,10 +10,10 @@ function Index() {
   const getTask = getTaskObj(taskId)
   const navigate = useNavigate()
 
-  const checklistComplete = checklistId => {
-    const updatedCheckLists = tasks.map(task => {
+  const checklistComplete = (checklistId: string) => {
+    const updatedCheckLists = tasks.map((task: Task) => {
       if (task.id === taskId) {
-        const updatedChecklist = task.checkList.map(list => {
+        const updatedChecklist = task.checkList.map((list: ChecklistItems) => {
           if (list.id === checklistId) {
             return { ...list, isComplete: !list.isComplete }
           }
@@ -46,8 +46,8 @@ function Index() {
     setInStorage(updatedCheckLists)
   }
 
-  const handleDelete = taskId => {
-    setTasks(prevTask => {
+  const handleDelete = (taskId: string) => {
+    setTasks((prevTask: any[]) => {
       if (!prevTask) return
       const updatedTask = prevTask.filter(task => task.id !== taskId)
       setInStorage(updatedTask)
@@ -57,10 +57,10 @@ function Index() {
   }
 
   const handleRepeatTask = () => {
-    setTasks(prevTask => {
+    setTasks((prevTask: any[]) => {
       const updatedTask = prevTask.map(task => {
         if (task.id === taskId) {
-          const updatedCheckList = task.checkList.map(list => {
+          const updatedCheckList = task.checkList.map((list: any[]) => {
             return {
               ...list,
               isComplete: false,
@@ -77,12 +77,12 @@ function Index() {
     })
   }
 
-  const currentDate = new Date()
+  const currentDate = new Date().valueOf()
   const selectedDate = getTask.date
 
   // add a conditinal rendering just incase if the selectDate is empty or undefined
   const parsedSelectedDate = selectedDate
-    ? parse(selectedDate, 'yyyy-MM-dd', new Date())
+    ? parse(selectedDate, 'yyyy-MM-dd', new Date()).valueOf()
     : null
 
   const formattedDate = parsedSelectedDate
@@ -104,7 +104,7 @@ function Index() {
               viewBox="0 0 24 24"
               stroke-width="1.5"
               stroke="currentColor"
-              class="w-6 h-6"
+              className="w-6 h-6"
             >
               <path
                 stroke-linecap="round"
@@ -124,7 +124,7 @@ function Index() {
               viewBox="0 0 24 24"
               stroke-width="1.5"
               stroke="gray"
-              class="w-5 h-5"
+              className="w-5 h-5"
             >
               <path
                 stroke-linecap="round"
@@ -159,7 +159,7 @@ function Index() {
                 viewBox="0 0 24 24"
                 stroke-width="1.5"
                 stroke="currentColor"
-                class="w-6 h-6"
+                className="w-6 h-6"
               >
                 <path
                   stroke-linecap="round"
@@ -192,7 +192,7 @@ function Index() {
               viewBox="0 0 24 24"
               stroke-width="1.5"
               stroke="currentColor"
-              class="w-6 h-6"
+              className="w-6 h-6"
             >
               <path
                 stroke-linecap="round"
@@ -248,7 +248,7 @@ function Index() {
           ''
         )}
         {getTask?.checkList &&
-          getTask.checkList.map(list => (
+          getTask.checkList.map((list: any) => (
             <div className="">
               <button
                 onClick={() => checklistComplete(list.id)}
@@ -266,7 +266,7 @@ function Index() {
                     viewBox="0 0 24 24"
                     stroke-width="1.5"
                     stroke="currentColor"
-                    class="w-6 h-6"
+                    className="w-6 h-6"
                   >
                     <path
                       stroke-linecap="round"
@@ -293,7 +293,7 @@ function Index() {
                 viewBox="0 0 24 24"
                 stroke-width="1.5"
                 stroke="currentColor"
-                class="w-6 h-6"
+                className="w-6 h-6"
               >
                 <path
                   stroke-linecap="round"
@@ -318,7 +318,7 @@ function Index() {
                 viewBox="0 0 24 24"
                 stroke-width="1.5"
                 stroke="currentColor"
-                class="w-6 h-6"
+                className="w-6 h-6"
               >
                 <path
                   stroke-linecap="round"

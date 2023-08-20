@@ -1,13 +1,18 @@
 import React from 'react'
 import { useContext, useState } from 'react'
 import { uid } from 'uid'
-import { TodoContext } from '../../contexts/taskContext'
+import { ChecklistItems } from '../../contexts/taskContext'
 
-function SubCheckList({ handleChange, checklistItems }) {
-  const [checkList, setCheckList] = useState('')
-  const [checkListItems, setCheckListItems] = useState([])
+interface ChangeProps {
+  handleChange: (data: { key: string; value: any }) => void
+  checklistItems: ChecklistItems[]
+}
 
-  const handleRemoveCheckList = id => {
+function SubCheckList({ handleChange, checklistItems }: ChangeProps) {
+  const [checkList, setCheckList] = useState<string>('')
+  const [checkListItems, setCheckListItems] = useState<ChecklistItems[]>([])
+
+  const handleRemoveCheckList = (id: string) => {
     const updatedChecklist = checkListItems.filter(
       checkList => checkList.id !== id
     )
@@ -48,7 +53,7 @@ function SubCheckList({ handleChange, checklistItems }) {
             viewBox="0 0 24 24"
             stroke-width="1.5"
             stroke="currentColor"
-            class="w-6 h-6"
+            className="w-6 h-6"
           >
             <path
               stroke-linecap="round"
@@ -72,7 +77,7 @@ function SubCheckList({ handleChange, checklistItems }) {
                 viewBox="0 0 24 24"
                 stroke-width="1.5"
                 stroke="currentColor"
-                class="w-6 h-6"
+                className="w-6 h-6"
               >
                 <path
                   stroke-linecap="round"

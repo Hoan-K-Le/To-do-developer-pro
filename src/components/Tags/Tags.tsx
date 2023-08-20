@@ -1,10 +1,14 @@
 import React from 'react'
 import { useState } from 'react'
 
-function Tags({ handleChange }) {
-  const [tagValue, setTagValue] = useState('')
+interface ChangeProps {
+  handleChange: (data: { key: string; value: any }) => void
+}
 
-  const handleTagChange = e => {
+function Tags({ handleChange }: ChangeProps) {
+  const [tagValue, setTagValue] = useState<string>('')
+
+  const handleTagChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTagValue(e.target.value)
     handleChange({ key: 'tags', value: e.target.value })
   }

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { useContext, useState } from 'react'
 import { TodoContext } from '../../contexts/taskContext'
 import { parse, format } from 'date-fns'
+import { Task } from '../../contexts/taskContext'
 
 function Index() {
   const [sorted, SetSorted] = useState('default')
@@ -11,12 +12,13 @@ function Index() {
 
   const { tasks, setInStorage, setTasks } = useContext(TodoContext)
 
-  const handleTags = e => {
-    setTags(e.target.value)
+  const handleTags = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const inputVal: string = e.target.value
+    setTags(inputVal)
   }
 
-  const handleCompleteTask = taskId => {
-    const updatedTask = tasks.map(task => {
+  const handleCompleteTask = (taskId: string) => {
+    const updatedTask = tasks.map((task: Task) => {
       if (task.id === taskId) {
         return {
           ...task,
@@ -29,11 +31,13 @@ function Index() {
     setTasks(updatedTask)
   }
 
-  const handleFilter = e => {
-    setFilterValue(e.target.value)
+  const handleFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputVal: string = e.target.value
+    setFilterValue(inputVal)
   }
-  const handleSort = e => {
-    SetSorted(e.target.value)
+  const handleSort = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const inputVal: string = e.target.value
+    SetSorted(inputVal)
   }
 
   let sortedList = [...tasks]
@@ -51,7 +55,9 @@ function Index() {
     )
   }
 
-  const tasksWithTags = tasks.filter(task => task.tags && task.tags.length > 0)
+  const tasksWithTags = tasks.filter(
+    (task: Task) => task.tags && task.tags.length > 0
+  )
 
   switch (sorted) {
     case 'ascPriority':
@@ -68,7 +74,7 @@ function Index() {
       break
   }
 
-  const getBorderColor = percent => {
+  const getBorderColor = (percent: number) => {
     if (percent <= 25) {
       return 'border-red-500'
     } else if (percent <= 75) {
@@ -78,10 +84,10 @@ function Index() {
     }
   }
 
-  const getDaysDiff = tasks.map(task => {
-    const currentDate = new Date()
+  const getDaysDiff = tasks.map((task: Task) => {
+    const currentDate = new Date().valueOf()
     const selectedDate = task.date
-      ? parse(task.date, 'yyyy-MM-dd', new Date())
+      ? parse(task.date, 'yyyy-MM-dd', new Date()).valueOf()
       : null
 
     const daysDifference = selectedDate
@@ -96,7 +102,7 @@ function Index() {
       return 'text-blue-400 font-bold'
     }
   })
-  const convertDate = tasks.map(task => {
+  const convertDate = tasks.map((task: Task) => {
     if (!task.date) {
       return null
     }
@@ -109,13 +115,13 @@ function Index() {
     return formattedDate
   })
 
-  const getDaysDiffBg = tasks.map(task => {
+  const getDaysDiffBg = tasks.map((task: Task) => {
     if (!task.date) {
       return 'bg-blue-400'
     }
-    const currentDate = new Date()
+    const currentDate = new Date().valueOf()
     const selectedDate = task.date
-      ? parse(task.date, 'yyyy-MM-dd', new Date())
+      ? parse(task.date, 'yyyy-MM-dd', new Date()).valueOf()
       : null
 
     const daysDifference = selectedDate
@@ -142,7 +148,7 @@ function Index() {
             viewBox="0 0 24 24"
             stroke-width="1.5"
             stroke="currentColor"
-            class="w-6 h-6"
+            className="w-6 h-6"
           >
             <path
               stroke-linecap="round"
@@ -180,7 +186,7 @@ function Index() {
           value={tags}
         >
           <option value="">All Tags</option>
-          {tasksWithTags.map(task => (
+          {tasksWithTags.map((task: Task) => (
             <option key={task.id} value={task.tags}>
               {task.tags}
             </option>
@@ -212,7 +218,7 @@ function Index() {
                       viewBox="0 0 24 24"
                       stroke-width="1.5"
                       stroke="gray"
-                      class="w-4 h-4"
+                      className="w-4 h-4"
                     >
                       <path
                         stroke-linecap="round"
@@ -232,7 +238,7 @@ function Index() {
                     viewBox="0 0 24 24"
                     stroke-width="1.5"
                     stroke="gray"
-                    class="w-5 h-5"
+                    className="w-5 h-5"
                   >
                     <path
                       stroke-linecap="round"
@@ -252,7 +258,7 @@ function Index() {
                   viewBox="0 0 24 24"
                   stroke-width="1.5"
                   stroke="currentColor"
-                  class="w-4 h-4"
+                  className="w-4 h-4"
                 >
                   <path
                     stroke-linecap="round"
@@ -276,7 +282,7 @@ function Index() {
                   viewBox="0 0 24 24"
                   stroke-width="1.5"
                   stroke="currentColor"
-                  class="w-4 h-4"
+                  className="w-4 h-4"
                 >
                   <path
                     stroke-linecap="round"

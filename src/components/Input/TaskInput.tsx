@@ -1,10 +1,14 @@
 import React from 'react'
 import { useState } from 'react'
 
-function TaskInput({ handleChange }) {
+interface ChangeProps {
+  handleChange: (data: { key: string; value: string }) => void
+}
+
+function TaskInput({ handleChange }: ChangeProps) {
   const [value, setValue] = useState('')
 
-  const handleInputChange = e => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value)
     handleChange({ key: 'value', value: e.target.value })
   }

@@ -1,18 +1,21 @@
 import React from 'react'
 import { useState } from 'react'
-import moment from 'moment'
 
-function TimeInput({ handleChange }) {
+interface ChangeProps {
+  handleChange: (data: { key: string; value: string }) => void
+}
+
+function TimeInput({ handleChange }: ChangeProps) {
   const [selectedDate, setSelectedDate] = useState('')
   const [selectedTime, setSelectedTime] = useState('')
 
-  const handleDateChange = e => {
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const dateValue = e.target.value
     handleChange({ key: 'date', value: dateValue })
     setSelectedDate(dateValue)
   }
 
-  const handleTimeChange = e => {
+  const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const timeValue = e.target.value
     handleChange({ key: 'time', value: timeValue })
     setSelectedTime(timeValue)

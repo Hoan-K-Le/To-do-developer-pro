@@ -1,12 +1,35 @@
-import React, { useState, useContext, useEffect } from 'react'
+import { useState, useContext, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { TodoContext } from '../../contexts/taskContext'
+import { TodoContext, Task } from '../../contexts/taskContext'
 import { uid } from 'uid'
+
 function EditTask({}) {
-  const [complexity, setComplexity] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
-  const [priority, setPriority] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
-  const [newChecklist, setNewChecklist] = useState('')
-  const [editTask, setEditTask] = useState({
+  const [complexity, setComplexity] = useState<number[]>([
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+  ])
+  const [priority, setPriority] = useState<number[]>([
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+  ])
+  const [newChecklist, setNewChecklist] = useState<string>('')
+  const [editTask, setEditTask] = useState<any>({
     value: '',
     priority: 0,
     complexity: 0,
@@ -24,8 +47,11 @@ function EditTask({}) {
 
   const taskToEdit = getTaskObj(taskId)
 
-  const handleEditChange = val => {
-    setEditTask(prevTask => ({
+  const handleEditChange = (val: {
+    key: keyof Task
+    value: Task[keyof Task]
+  }) => {
+    setEditTask((prevTask: Task) => ({
       ...prevTask,
       [val.key]: val.value,
     }))
@@ -35,19 +61,28 @@ function EditTask({}) {
     if (!newChecklist) return
     const newChecklists = [
       ...editTask.checkList,
-      { id: uid(), value: newChecklist, isComplete: false },
+      {
+        id: uid(),
+        value: newChecklist,
+        isComplete: false,
+      },
     ]
-    setEditTask(prevTask => ({
+    setEditTask((prevTask: Task) => ({
       ...prevTask,
       checkList: newChecklists,
     }))
     setNewChecklist('')
   }
 
-  const handleRemoveCheckList = listId => {
-    const updatedTask = editTask.checkList.filter(item => item.id !== listId)
+  const handleRemoveCheckList = (listId: string) => {
+    const updatedTask = editTask.checkList.filter(
+      (item: Task) => item.id !== listId
+    )
     // setNewChecklistItems(updatedTask)
-    handleEditChange({ key: 'checkList', value: updatedTask })
+    handleEditChange({
+      key: 'checkList',
+      value: updatedTask,
+    })
   }
 
   const handleSave = () => {
@@ -69,7 +104,7 @@ function EditTask({}) {
 
   useEffect(() => {
     if (taskToEdit) {
-      setEditTask(prevTask => ({
+      setEditTask((prevTask: Task) => ({
         ...prevTask,
         value: taskToEdit.value,
         priority: taskToEdit.priority,
@@ -92,7 +127,7 @@ function EditTask({}) {
               viewBox="0 0 24 24"
               stroke-width="1.5"
               stroke="currentColor"
-              class="w-6 h-6"
+              className="w-6 h-6"
             >
               <path
                 stroke-linecap="round"
@@ -107,7 +142,10 @@ function EditTask({}) {
       <p className="text-lg mb-5">Task Name</p>
       <input
         onChange={e =>
-          handleEditChange({ key: 'value', value: e.target.value })
+          handleEditChange({
+            key: 'value',
+            value: e.target.value,
+          })
         }
         value={editTask.value}
         className="border px-20 rounded-2xl text-lg py-2"
@@ -121,7 +159,10 @@ function EditTask({}) {
             <div className="">
               <button
                 onClick={() =>
-                  handleEditChange({ key: 'priority', value: num })
+                  handleEditChange({
+                    key: 'priority',
+                    value: num,
+                  })
                 }
                 className={` w-7 bg-blue-100 rounded-full ${
                   editTask.priority === num ? 'border bg-blue-300' : ''
@@ -140,7 +181,10 @@ function EditTask({}) {
             <div>
               <button
                 onClick={() =>
-                  handleEditChange({ key: 'complexity', value: num })
+                  handleEditChange({
+                    key: 'complexity',
+                    value: num,
+                  })
                 }
                 className={`w-7 bg-blue-100 rounded-full ${
                   editTask.complexity === num ? 'border bg-blue-300' : ''
@@ -156,14 +200,20 @@ function EditTask({}) {
         <input
           type="date"
           onChange={e =>
-            handleEditChange({ key: 'date', value: e.target.value })
+            handleEditChange({
+              key: 'date',
+              value: e.target.value,
+            })
           }
           className="border rounded-xl px-2 py-2"
           value={editTask.date}
         />
         <input
           onChange={e =>
-            handleEditChange({ key: 'time', value: e.target.value })
+            handleEditChange({
+              key: 'time',
+              value: e.target.value,
+            })
           }
           value={editTask.time}
           type="time"
@@ -189,7 +239,7 @@ function EditTask({}) {
             viewBox="0 0 24 24"
             stroke-width="1.5"
             stroke="currentColor"
-            class="w-6 h-6"
+            className="w-6 h-6"
           >
             <path
               stroke-linecap="round"
@@ -200,7 +250,7 @@ function EditTask({}) {
         </button>
       </div>
       {editTask.checkList.length > 0 &&
-        editTask.checkList.map(item => (
+        editTask.checkList.map((item: Task) => (
           <div className="border flex p-2 my-2 relative rounded-xl bg-white">
             <p className="text-xl">{item.value}</p>
             <button
@@ -213,7 +263,7 @@ function EditTask({}) {
                 viewBox="0 0 24 24"
                 stroke-width="1.5"
                 stroke="currentColor"
-                class="w-6 h-6"
+                className="w-6 h-6"
               >
                 <path
                   stroke-linecap="round"
@@ -228,7 +278,10 @@ function EditTask({}) {
         <p className="text-xl mb-4">Add Tags</p>
         <input
           onChange={e =>
-            handleEditChange({ key: 'tags', value: e.target.value })
+            handleEditChange({
+              key: 'tags',
+              value: e.target.value,
+            })
           }
           value={editTask.tags}
           className="w-full p-2 rounded-xl"

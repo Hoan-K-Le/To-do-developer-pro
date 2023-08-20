@@ -1,25 +1,44 @@
 import { createContext, useState, useEffect } from 'react'
-import { uid } from 'uid'
+
 import { useNavigate } from 'react-router-dom'
 
-export const TodoContext = createContext()
+export const TodoContext = createContext<any>(null)
 
-export const TaskProvider = ({ children }) => {
-  const [tasks, setTasks] = useState([])
+export interface ChecklistItems {
+  id: string
+  isComplete: boolean
+  value: string
+}
+
+export interface Task {
+  id: string
+  checkList: ChecklistItems[]
+  percent: number
+  value: string
+  priority: number
+  complexity: number
+  isComplete: boolean
+  date: string
+  time: string
+  tags: string[]
+}
+
+export const TaskProvider = ({ children }: { children: any }) => {
+  const [tasks, setTasks] = useState<Task[]>([])
 
   const navigate = useNavigate()
 
-  const setInStorage = list => {
+  const setInStorage = (list: []) => {
     return localStorage.setItem('tasks', JSON.stringify(list))
   }
 
-  const getTaskObj = taskId => {
-    return tasks.find(task => task.id === taskId)
+  const getTaskObj = (taskId: string) => {
+    return tasks.find((task: Task) => task.id === taskId)
   }
 
-  const updateTask = updatedTask => {
-    setTasks(prevTasks => {
-      const updatedTasks = prevTasks.map(task =>
+  const updateTask = (updatedTask: any) => {
+    setTasks((prevTasks: any) => {
+      const updatedTasks = prevTasks.map((task: any) =>
         task.id === updatedTask.id
           ? {
               ...task,
@@ -37,7 +56,7 @@ export const TaskProvider = ({ children }) => {
   }
 
   useEffect(() => {
-    const storedTasks = JSON.parse(localStorage.getItem('tasks'))
+    const storedTasks = JSON.parse(localStorage.getItem('tasks') as any)
     if (storedTasks) {
       setTasks(storedTasks)
     }
@@ -52,6 +71,7 @@ export const TaskProvider = ({ children }) => {
         tasks,
         updateTask,
         setTasks,
+
         /////////////
         getTaskObj,
         // Delete
