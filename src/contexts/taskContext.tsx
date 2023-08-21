@@ -18,8 +18,8 @@ export interface Task {
   priority: number
   complexity: number
   isComplete: boolean
-  date: null
-  time: null
+  date: string
+  time: string
   tags: string[]
 }
 

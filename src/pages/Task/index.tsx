@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { MouseEventHandler, useState } from 'react'
 import { uid } from 'uid'
 import TaskHeader from '../../components/TaskHeader/TaskHeader'
 import TaskInput from '../../components/Input/TaskInput'
@@ -8,30 +8,19 @@ import TimeInput from '../../components/TimeInput/TimeInput'
 import SubCheckList from '../../components/Subcheck/SubCheckList'
 import Tags from '../../components/Tags/Tags'
 import { useContext } from 'react'
-import { TodoContext } from '../../contexts/taskContext'
+import { TodoContext, Task } from '../../contexts/taskContext'
 import { useNavigate } from 'react-router-dom'
 
 function Index() {
   // const { addTask } = useContext(TodoContext)
   const { tasks, setInStorage, setTasks } = useContext(TodoContext)
-  type Task = {
-    value: string
-    priority: number
-    complexity: number
-    date: any
-    time: any
-    percent: number
-    isComplete: boolean
-    checkList: any[]
-    tags: string[]
-    id: string
-  }
+
   const [task, setTask] = useState<Task>({
     value: '',
     priority: 0,
     complexity: 0,
-    date: null,
-    time: null,
+    date: '',
+    time: '',
     percent: 0,
     isComplete: false,
     checkList: [],
@@ -41,14 +30,14 @@ function Index() {
 
   const navigate = useNavigate()
 
-  const handleChange = (val: any) => {
+  const handleChange = (val: { key: string; value: any }) => {
     setTask(prevTask => ({
       ...prevTask,
       [val.key]: val.value,
     }))
   }
 
-  const addTask = (e: any) => {
+  const addTask = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
     if (task.value) {
       const updatedTask = [...tasks, task]
@@ -59,8 +48,8 @@ function Index() {
       value: '',
       priority: 0,
       complexity: 0,
-      date: null,
-      time: null,
+      date: '',
+      time: '',
       percent: 0,
       isComplete: false,
       checkList: [],

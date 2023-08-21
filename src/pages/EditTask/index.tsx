@@ -29,12 +29,12 @@ function EditTask({}) {
     10,
   ])
   const [newChecklist, setNewChecklist] = useState<string>('')
-  const [editTask, setEditTask] = useState<any>({
+  const [editTask, setEditTask] = useState<Task>({
     value: '',
     priority: 0,
     complexity: 0,
-    date: null,
-    time: null,
+    date: '',
+    time: '',
     percent: 0,
     isComplete: false,
     checkList: [],
@@ -250,7 +250,7 @@ function EditTask({}) {
         </button>
       </div>
       {editTask.checkList.length > 0 &&
-        editTask.checkList.map((item: Task) => (
+        editTask.checkList.map((item: ChecklistItems) => (
           <div className="border flex p-2 my-2 relative rounded-xl bg-white">
             <p className="text-xl">{item.value}</p>
             <button
